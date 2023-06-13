@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- ver 1.4 del 09/06/2021 -->
+<xs:schema xmlns="http://inps.it/ISEERiforma" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://inps.it/ISEERiforma" elementFormDefault="qualified">
+	<xs:import/>
+	<xs:include schemaLocation="ISEE_TipiComuni.xsd"/>
+	<!-- Inizio Attestazione -->
+	<xs:element name="Attestazione" type="TypeAttestazione"/>
+	<!--*** Definizione tipi ***-->
+	<!-- Attestazione -->
+	<xs:complexType name="TypeAttestazione">
+		<xs:sequence>
+			<!-- Ordinario -->
+			<xs:element name="Ordinario" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Nucleo familiare -->
+						<xs:element name="NucleoFamiliare">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ComponenteNucleo" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="RapportoConDichiarante" use="required">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="D"/>
+														<xs:enumeration value="C"/>
+														<xs:enumeration value="F"/>
+														<xs:enumeration value="MA"/>
+														<xs:enumeration value="FC"/>
+														<xs:enumeration value="FNC"/>
+														<xs:enumeration value="P"/>
+														<xs:enumeration value="GNC"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+											<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+											<xs:attribute name="Nome" type="TypeNome" use="required"/>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<!-- ISEE Ordinario -->
+						<!-- quadro Attestazione ISEE ORDINARIO -->
+						<!-- Indicatore: STD -->
+						<xs:element name="ISEEOrdinario">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Valori" type="TypeValori"/>
+									<!-- Modalità di calcolo ISEE Ordinario -->
+									<xs:element name="ModalitaCalcoloISEEOrdinario" type="TypeModalitaCalcolo"/>
+								</xs:sequence>
+								<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+							</xs:complexType>
+						</xs:element>
+						<!-- ISEE Minorenne -->
+						<xs:element name="ISEEMin" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ComponenteMinorenne" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:choice>
+												<!-- ISEE Min = ORDINARIO -->
+												<xs:element name="ISEEOrd"/>
+												<!-- ISEE Min con componente attratta -->
+												<xs:element name="ISEEMinAttr">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAttratta" type="TypeCompAggiuntiva"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEMinAttr" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE Min con componente aggiuntiva -->
+												<xs:element name="ISEEMinAgg">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAgguntiva" type="TypeCompAggiuntiva"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEMinAggr" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE Min = Non Calcolabile -->
+												<xs:element name="ISEENonCalcolabile"/>
+											</xs:choice>
+											<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+											<xs:attribute name="Nome" type="TypeNome" use="required"/>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+											<xs:attribute name="ISEE" type="TypeDecimal" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<!-- ISEE Universitario -->
+						<xs:element name="ISEEUni" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="StudenteUniversitario" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:choice>
+												<!-- ISEE Uni = ORDINARIO -->
+												<xs:element name="ISEEOrd"/>
+												<!-- ISEE Uni con componente attratta -->
+												<xs:element name="ISEEUniAttr">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAttratta" type="TypeCompAggiuntiva"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEUniAttr" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE Uni con componente aggiuntiva -->
+												<xs:element name="ISEEUniAgg">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAgguntiva" type="TypeCompAggiuntiva"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEUniAgg" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE universitario con studente attratto -->
+												<xs:element name="ISEEUniStudAttratto">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="NucleoFamiliareAttratto">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element name="ElementoNucleoAttratto" minOccurs="0" maxOccurs="unbounded">
+																			<xs:complexType>
+																				<xs:attribute name="RapportoConDichiarante" use="required">
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:enumeration value="D"/>
+																							<xs:enumeration value="C"/>
+																							<xs:enumeration value="F"/>
+																							<xs:enumeration value="MA"/>
+																							<xs:enumeration value="FC"/>
+																							<xs:enumeration value="FNC"/>
+																							<xs:enumeration value="P"/>
+																							<xs:enumeration value="GNC"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:attribute>
+																				<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+																				<xs:attribute name="Nome" type="TypeNome" use="required"/>
+																				<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+																			</xs:complexType>
+																		</xs:element>
+																	</xs:sequence>
+																</xs:complexType>
+															</xs:element>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEUniStudAtt" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE universitario con studente attratto nel nucleo di un genitore e l'altro che entra come componente attratta-->
+												<xs:element name="ISEEUniStudAttrattoCompAttratta">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="NucleoFamiliareAttratto">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element name="ElementoNucleoAttratto" minOccurs="0" maxOccurs="unbounded">
+																			<xs:complexType>
+																				<xs:attribute name="RapportoConDichiarante" use="required">
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:enumeration value="D"/>
+																							<xs:enumeration value="C"/>
+																							<xs:enumeration value="F"/>
+																							<xs:enumeration value="MA"/>
+																							<xs:enumeration value="FC"/>
+																							<xs:enumeration value="FNC"/>
+																							<xs:enumeration value="P"/>
+																							<xs:enumeration value="GNC"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:attribute>
+																				<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+																				<xs:attribute name="Nome" type="TypeNome" use="required"/>
+																				<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+																			</xs:complexType>
+																		</xs:element>
+																	</xs:sequence>
+																</xs:complexType>
+															</xs:element>
+															<xs:element name="ComponenteAttratta" type="TypeCompAggiuntiva"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEUniStudAttrattoCompAttratta" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE universitario con studente attratto nel nucleo di un genitore e l'altro che entra come componente aggiuntiva-->
+												<xs:element name="ISEEUniStudAttrattoCompAggiuntiva">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="NucleoFamiliareAttratto">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element name="ElementoNucleoAttratto" minOccurs="0" maxOccurs="unbounded">
+																			<xs:complexType>
+																				<xs:attribute name="RapportoConDichiarante" use="required">
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:enumeration value="D"/>
+																							<xs:enumeration value="C"/>
+																							<xs:enumeration value="F"/>
+																							<xs:enumeration value="MA"/>
+																							<xs:enumeration value="FC"/>
+																							<xs:enumeration value="FNC"/>
+																							<xs:enumeration value="P"/>
+																							<xs:enumeration value="GNC"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:attribute>
+																				<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+																				<xs:attribute name="Nome" type="TypeNome" use="required"/>
+																				<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+																			</xs:complexType>
+																		</xs:element>
+																	</xs:sequence>
+																</xs:complexType>
+															</xs:element>
+															<xs:element name="ComponenteAggiuntiva" type="TypeCompAggiuntiva"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEUniStudAttrattoCompAggiuntiva" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE Uni = Non Calcolabile -->
+												<xs:element name="ISEENonCalcolabile"/>
+											</xs:choice>
+											<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+											<xs:attribute name="Nome" type="TypeNome" use="required"/>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+											<xs:attribute name="ISEE" type="TypeDecimal" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<!-- ISEE socio sanitario - residenziale -->
+						<!-- casi 1) 8) 10) 12 14) nucleo ordinario gli altri casi sono esplicitati nell'elemento Ridotto -->
+						<xs:element name="ISEESocioSanRes" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ComponenteSocioSanitarieRes" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:choice>
+												<!-- ISEE SocioSanRes = ORDINARIO caso 1)-->
+												<xs:element name="ISEEOrd"/>
+												<!-- ISEE SocioSanRes caso 8)-->
+												<xs:element name="ISEESocioSanRes">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEESocioSanResRes" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE SocioSanRes = ordinario con componenti Aggiuntive caso 10)-->
+												<xs:element name="ISEEOrdAgg">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAgguntiva" type="TypeCompAggiuntiva" maxOccurs="unbounded"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEEOrdAgg" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE SocioSanRes con componenti Aggiuntive caso 12)-->
+												<xs:element name="ISEESocioSanResAgg">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAgguntiva" type="TypeCompAggiuntiva" maxOccurs="unbounded"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloIISEESocioSanResAgg" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE SocioSanRes Non Calcolabile caso 14)-->
+												<xs:element name="ISEENonCalcolabile"/>
+											</xs:choice>
+											<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+											<xs:attribute name="Nome" type="TypeNome" use="required"/>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+											<xs:attribute name="ISEE" type="TypeDecimal" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Corrente">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="SI"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="DataPresentazioneModuloSostitutivo" type="xs:date"/>
+					<xs:attribute name="ProtocolloDSUModuloSostitutivo" type="TypeProtocollo"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Ridotto" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Nucleo familiare ristretto -->
+						<xs:element name="NucleoRistretto">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ComponenteNucleoRistretto" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="RelazioneConBeneficiario" use="required">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="B"/>
+														<xs:enumeration value="C"/>
+														<xs:enumeration value="F"/>
+														<xs:enumeration value="FC"/>
+														<xs:enumeration value="FNC"/>
+														<xs:enumeration value="MA"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+											<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+											<xs:attribute name="Nome" type="TypeNome" use="required"/>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<!-- ISEE con nucleo familiare ristretto -->
+						<xs:element name="ISEERistretto" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Valori" type="TypeValori"/>
+									<xs:element name="ModalitaCalcoloISEERistretto" type="TypeModalitaCalcolo"/>
+								</xs:sequence>
+								<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+							</xs:complexType>
+						</xs:element>
+						<!-- ISEE socio sanitario - residenziale ristretto casi 7) 9) 11) 13) 14)-->
+						<xs:element name="ISEESocioSanResRistretto" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ComponenteSocioSanitarieRes">
+										<xs:complexType>
+											<xs:choice>
+												<!-- ISEE SocioSanResRistretto = Ristretto caso 7)-->
+												<xs:element name="ISEERistretto"/>
+												<!-- ISEE SocioSanResRistretto caso 9)-->
+												<xs:element name="ISEESocioSanResRistretto">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEESocioSanResRistretto" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE SocioSanResRistretto = Ristretto con componenti Aggiuntive caso 11)-->
+												<xs:element name="ISEERistrettoAgg">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAgguntiva" type="TypeCompAggiuntiva" maxOccurs="unbounded"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEERistrettoAgg" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE SocioSanResRistretto con componenti Aggiuntive caso 13)-->
+												<xs:element name="ISEESocioSanResRistrettoAgg">
+													<xs:complexType>
+														<xs:sequence>
+															<xs:element name="ComponenteAgguntiva" type="TypeCompAggiuntiva" maxOccurs="unbounded"/>
+															<xs:element name="Valori" type="TypeValori"/>
+															<xs:element name="ModalitaCalcoloISEESocioSanResRistrettoAgg" type="TypeModalitaCalcolo"/>
+														</xs:sequence>
+														<xs:attribute name="DataRilascio" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<!-- ISEE SocioSanRes Non Calcolabile caso 14)-->
+												<xs:element name="ISEENonCalcolabile"/>
+											</xs:choice>
+											<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+											<xs:attribute name="Nome" type="TypeNome" use="required"/>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+											<xs:attribute name="ISEE" type="TypeDecimal" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="CodiceFiscaleBeneficiario" type="TypeCodiceFiscale" use="required"/>
+					<xs:attribute name="Corrente">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="SI"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="DataPresentazioneModuloSostitutivo" type="xs:date"/>
+					<xs:attribute name="ProtocolloDSUModuloSostitutivo" type="TypeProtocollo"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Variazione" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence minOccurs="0">
+						<xs:element name="DiscordanzeContestazione" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="CFDiscordanza" type="TypeCodiceFiscale" use="required"/>
+								<xs:attribute name="TipologiaDiscordanza" use="required"/>
+								<xs:attribute name="SpecificaDiscordanza" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="TipoVariazione" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Contestazione"/>
+								<xs:enumeration value="Ricalcolo"/>
+								<xs:enumeration value="Integrazione"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="NumeroProtocolloDSUVariata" type="TypeProtocollo" use="required"/>
+					<xs:attribute name="DataPresentazioneDSUVariata" type="xs:date" use="required"/>
+					<xs:attribute name="NumeroProtocolloMittenteDSUVariata" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="29"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="NoteVariazione" type="xs:string" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="OmissioneDifformita" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence minOccurs="0">
+						<xs:element name="Rapporto" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="Sezione"/>
+								<xs:attribute name="TipoRapporto" use="optional">
+									<!-- 01  Conti correnti -->
+									<!-- 02  Rapporto di conto deposito titoli e/o obbligazioni -->
+									<!-- 03  Conto deposito a risparmio libero/vincolato-->
+									<!-- 04  Rapporto fiduciario ex legge n. 1966 del 1939 -->
+									<!-- 05  Gestione collettiva del risparmio -->
+									<!-- 06  Gestione patrimoniale -->
+									<!-- 07  Certificati di deposito e buoni fruttiferi -->
+									<!-- 09  Conto  terzi individuale/globale -->
+									<!-- 23  Prodotti finanziari emessi da imprese di assicurazione -->
+									<!-- 99  Altro -->
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="01"/>
+											<xs:enumeration value="02"/>
+											<xs:enumeration value="03"/>
+											<xs:enumeration value="04"/>
+											<xs:enumeration value="05"/>
+											<xs:enumeration value="06"/>
+											<xs:enumeration value="07"/>
+											<xs:enumeration value="09"/>
+											<xs:enumeration value="23"/>
+											<xs:enumeration value="99"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="Identificativo" type="xs:string" use="optional"/>
+								<xs:attribute name="CodiceFiscaleOperatore" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:maxLength value="16"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="DescrizioneOperatoreFinanziario" type="xs:string" use="optional"/>
+								<xs:attribute name="Saldo3112" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="ConsistenzaMedia" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="Valore" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="DataInizio" type="TypeDataSQL" use="optional"/>
+								<xs:attribute name="DataFine" type="TypeDataSQL" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="RedditoAE" minOccurs="0">
+							<xs:complexType>
+								<xs:attribute name="TipoModelloAE">
+									<!-- 1 modello 730-->
+									<!-- 2 modello Unico-->
+									<!-- 3 modello CU -->
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="1"/>
+											<xs:enumeration value="2"/>
+											<xs:enumeration value="3"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="RedditoComplessivoIRPEFAE"/>
+								<xs:attribute name="RedditoLavoroDipendenteAE"/>
+								<xs:attribute name="RedditoPensioneAE"/>
+								<xs:attribute name="RedditoAgrarioAE"/>
+								<xs:attribute name="RedditiImpostaSostitutivaAE"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="TipoOmissioneDifformita" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="PatrimoniMobiliari"/>
+								<xs:enumeration value="RedditiScostamento"/>
+								<xs:enumeration value="PatrimoniMobiliariSottoSoglia"/>
+								<xs:enumeration value="PatrimoniMobiliariSopraSoglia"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+					<xs:attribute name="DataControlloAE" type="TypeDataSQL" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="CodiceFiscaleDichiarante" type="TypeCodiceFiscale" use="required"/>
+		<xs:attribute name="NumeroProtocolloDSU" type="TypeProtocollo" use="required"/>
+		<xs:attribute name="DataPresentazione" type="xs:date" use="required"/>
+		<xs:attribute name="DataValidita" type="xs:date" use="required"/>
+		<xs:attribute name="ProtocolloMittente" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="29"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="DataScadenzaDSUCorrente" type="xs:date" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TypeCompAggiuntiva">
+		<xs:sequence>
+			<xs:element name="ComponenteAttrattaAggiuntiva">
+				<xs:complexType>
+					<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+					<xs:attribute name="Nome" type="TypeNome" use="required"/>
+					<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+					<xs:attribute name="ProtocolloDSURiferimento" type="TypeProtocollo" use="optional"/>
+					<xs:attribute name="ValoreComponenteAggiuntiva" type="TypeDecimal" use="optional"/>
+					<xs:attribute name="ProtocolloDSUComponenteAggiuntiva" type="TypeProtocollo" use="optional"/>
+					<xs:attribute name="ProtocolloMittenteComponenteAggiuntiva">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="29"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TypeValori">
+		<xs:attribute name="ISE" type="TypeDecimal" use="required"/>
+		<xs:attribute name="ScalaEquivalenza" type="TypeDecimal" use="required"/>
+		<xs:attribute name="ISEE" type="TypeDecimal" use="required"/>
+		<xs:attribute name="ISR" type="TypeDecimal" use="required"/>
+		<xs:attribute name="ISP" type="TypeDecimal" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TypeModalitaCalcolo">
+		<xs:attribute name="SommaRedditiComponenti" type="xs:decimal" use="required"/>
+		<xs:attribute name="SommaRedditiComponentiCorrente" type="xs:decimal"/>
+		<xs:attribute name="RedditoFigurativoPatrimonioMobiliare" type="xs:decimal" use="required"/>
+		<xs:attribute name="Detrazioni" type="xs:decimal" use="required"/>
+		<xs:attribute name="ISR" type="xs:decimal" use="required"/>
+		<xs:attribute name="PatrimonioMobiliare" type="xs:decimal" use="required"/>
+		<xs:attribute name="DetrazionePatrimonioMobiliare" type="xs:decimal" use="required"/>
+		<xs:attribute name="PatrimonioImmobiliare" type="xs:decimal" use="required"/>
+		<xs:attribute name="DetrazionePatrimonioImmobiliare" type="xs:decimal" use="required"/>
+		<xs:attribute name="ISP" type="xs:decimal" use="required"/>
+		<xs:attribute name="ISE" type="TypeDecimal" use="required"/>
+		<xs:attribute name="ParametroNucleo" type="xs:decimal" use="required"/>
+		<xs:attribute name="Maggiorazioni" type="xs:decimal" use="required"/>
+		<xs:attribute name="ScalaEquivalenza" type="xs:decimal" use="required"/>
+	</xs:complexType>
+</xs:schema>

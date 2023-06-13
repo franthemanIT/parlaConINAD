@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://inps.it/ConsultazioneISEE" targetNamespace="http://inps.it/ConsultazioneISEE" elementFormDefault="qualified">
+	<xs:element name="ConsultazioneAttestazione">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="request" type="tns:ConsultazioneAttestazioneRequestType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ConsultazioneAttestazioneRequestType">
+		<xs:complexContent>
+			<xs:extension base="tns:FiltroConsultazioneType"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ConsultazioneAttestazioneResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ConsultazioneAttestazioneResult" type="tns:ConsultazioneAttestazioneResponseType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ConsultazioneAttestazioneResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ConsultazioneResponseType">
+				<xs:sequence>
+					<xs:element name="XmlEsitoAttestazione" type="xs:base64Binary" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ConsultazioneIndicatore">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="request" type="tns:ConsultazioneIndicatoreRequestType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ConsultazioneIndicatoreRequestType">
+		<xs:sequence>
+			<xs:element name="TipoIndicatore" type="tns:TipoIndicatoreSinteticoEnum"/>
+			<xs:element name="RicercaCF" type="tns:RicercaCFType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ConsultazioneIndicatoreResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ConsultazioneIndicatoreResult" type="tns:ConsultazioneIndicatoreResponseType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ConsultazioneIndicatoreResponseType">
+		<xs:complexContent>
+			<xs:extension base="tns:ConsultazioneResponseType">
+				<xs:sequence>
+					<xs:element name="XmlEsitoIndicatore" type="xs:base64Binary" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FiltroConsultazioneType">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="RicercaCF" type="tns:RicercaCFType"/>
+				<xs:element name="RicercaProtDSU" type="tns:RicercaProtDSUType"/>
+				<xs:element name="RicercaProtMittente" type="tns:RicercaProtMittenteType"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RicercaCFType">
+		<xs:sequence>
+			<xs:element name="CodiceFiscale" type="tns:CodiceFiscaleType"/>
+			<xs:element name="DataValidita" type="xs:date" minOccurs="0"/>
+			<xs:element name="PrestazioneDaErogare" type="tns:PrestazioneDaErogareType" minOccurs="0"/>
+			<xs:element name="ProtocolloDomandaEnteErogatore" type="xs:string" minOccurs="0"/>
+			<xs:element name="StatodomandaPrestazione" type="tns:StatoDomandaPrestazioneType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="StatoDomandaPrestazioneType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Da Erogare"/>
+			<xs:enumeration value="Erogata"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PrestazioneDaErogareType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A1.01"/>
+			<xs:enumeration value="A1.02"/>
+			<xs:enumeration value="A1.03"/>
+			<xs:enumeration value="A1.04"/>
+			<xs:enumeration value="A1.05"/>
+			<xs:enumeration value="A1.06"/>
+			<xs:enumeration value="A1.07"/>
+			<xs:enumeration value="A1.08"/>
+			<xs:enumeration value="A1.09"/>
+			<xs:enumeration value="A1.10"/>
+			<xs:enumeration value="A1.11"/>
+			<xs:enumeration value="A1.12"/>
+			<xs:enumeration value="A1.13"/>
+			<xs:enumeration value="A1.14"/>
+			<xs:enumeration value="A1.15"/>
+			<xs:enumeration value="A1.16"/>
+			<xs:enumeration value="A1.17"/>
+			<xs:enumeration value="A1.18"/>
+			<xs:enumeration value="A1.19"/>
+			<xs:enumeration value="A1.20"/>
+			<xs:enumeration value="A2.01"/>
+			<xs:enumeration value="A2.02"/>
+			<xs:enumeration value="A2.03"/>
+			<xs:enumeration value="A2.04"/>
+			<xs:enumeration value="A2.05"/>
+			<xs:enumeration value="A2.06"/>
+			<xs:enumeration value="A2.07"/>
+			<xs:enumeration value="A2.08"/>
+			<xs:enumeration value="A2.09"/>
+			<xs:enumeration value="A2.10"/>
+			<xs:enumeration value="A2.11"/>
+			<xs:enumeration value="A2.12"/>
+			<xs:enumeration value="A3.01"/>
+			<xs:enumeration value="A3.02"/>
+			<xs:enumeration value="A3.03"/>
+			<xs:enumeration value="Z9.99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ConsultazioneResponseType">
+		<xs:sequence>
+			<xs:element name="IdRichiesta" type="xs:int"/>
+			<xs:element name="Esito" type="tns:EsitoEnum"/>
+			<xs:element name="DescrizioneErrore" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RicercaProtDSUType">
+		<xs:sequence>
+			<xs:element name="ProtocolloDSU" type="xs:string"/>
+			<xs:element name="CodiceFiscaleBeneficiario" type="tns:CodiceFiscaleType"/>
+			<xs:element name="PrestazioneDaErogare" type="tns:PrestazioneDaErogareType" minOccurs="0"/>
+			<xs:element name="ProtocolloDomandaEnteErogatore" type="xs:string" minOccurs="0"/>
+			<xs:element name="StatodomandaPrestazione" type="tns:StatoDomandaPrestazioneType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RicercaProtMittenteType">
+		<xs:sequence>
+			<xs:element name="ProtocolloMittente" type="xs:string"/>
+			<xs:element name="CodiceFiscaleBeneficiario" type="tns:CodiceFiscaleType"/>
+			<xs:element name="PrestazioneDaErogare" type="tns:PrestazioneDaErogareType" minOccurs="0"/>
+			<xs:element name="ProtocolloDomandaEnteErogatore" type="xs:string" minOccurs="0"/>
+			<xs:element name="StatodomandaPrestazione" type="tns:StatoDomandaPrestazioneType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="EsitoEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="RICHIESTA_INVALIDA"/>
+			<xs:enumeration value="DATI_NON_TROVATI"/>
+			<xs:enumeration value="DATABASE_OFFLINE"/>
+			<xs:enumeration value="ERRORE_INTERNO"/>
+			<xs:enumeration value="RISCONTRO_NON_VALIDO"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TipoIndicatoreSinteticoEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Ordinario"/>
+			<xs:enumeration value="Minorenne"/>
+			<xs:enumeration value="Universitario"/>
+			<xs:enumeration value="SocioSanitario"/>
+			<xs:enumeration value="Dottorato"/>
+			<xs:enumeration value="Residenziale"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodiceFiscaleType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Z]{6}\d{2}[A-Z]\d{2}[A-Z][A-Z0-9]{3}[A-Z])|(\d{11})"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

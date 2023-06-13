@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- ver 1.0.0 del 28/11/2014 -->
+<xs:schema xmlns="http://inps.it/ISEERiforma" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://inps.it/ISEERiforma" elementFormDefault="qualified">
+  <xs:include schemaLocation="ISEE_Attestazione.xsd"/>
+  <xs:include schemaLocation="ISEE_TipiComuni.xsd"/>
+  <xs:element name="EsitoAttestazione" type="TypeEsitoConsultazioneAttestazione"/>
+	<xs:complexType name="TypeEsitoConsultazioneAttestazione">
+    <xs:sequence>
+      <xs:element name="Attestazione" type="TypeAttestazione" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Ricerca" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:choice>
+              <xs:element name="RicercaCF" type="TypeRicercaCF"/>
+              <xs:element name="RicercaProtDSU" type="TypeRicercaProtDSU"/>
+              <xs:element name="RicercaProtMittente" type="TypeRicercaProtMittente"/>
+            </xs:choice>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

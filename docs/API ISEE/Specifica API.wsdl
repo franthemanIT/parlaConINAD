@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:i0="http://tempuri.org/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://inps.it/ConsultazioneISEE" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="SvcConsultazione" targetNamespace="http://inps.it/ConsultazioneISEE">
+	<wsdl:types>
+		<xs:schema elementFormDefault="qualified" targetNamespace="http://inps.it/ConsultazioneISEE" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:include schemaLocation="ConsultazioneISEE_v2.8_PDND.xsd"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="ISvcConsultazione_ConsultazioneAttestazione_InputMessage">
+		<wsdl:part name="parameters" element="tns:ConsultazioneAttestazione"/>
+	</wsdl:message>
+	<wsdl:message name="ISvcConsultazione_ConsultazioneAttestazione_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ConsultazioneAttestazioneResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ISvcConsultazione_ConsultazioneIndicatore_InputMessage">
+		<wsdl:part name="parameters" element="tns:ConsultazioneIndicatore"/>
+	</wsdl:message>
+	<wsdl:message name="ISvcConsultazione_ConsultazioneIndicatore_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ConsultazioneIndicatoreResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="ISvcConsultazione">
+		<wsdl:operation name="ConsultazioneAttestazione">
+			<wsdl:input message="tns:ISvcConsultazione_ConsultazioneAttestazione_InputMessage" wsaw:Action="http://inps.it/ConsultazioneISEE/ISvcConsultazione/ConsultazioneAttestazione"/>
+			<wsdl:output message="tns:ISvcConsultazione_ConsultazioneAttestazione_OutputMessage" wsaw:Action="http://inps.it/ConsultazioneISEE/ISvcConsultazione/ConsultazioneAttestazioneResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="ConsultazioneIndicatore">
+			<wsdl:input message="tns:ISvcConsultazione_ConsultazioneIndicatore_InputMessage" wsaw:Action="http://inps.it/ConsultazioneISEE/ISvcConsultazione/ConsultazioneIndicatore"/>
+			<wsdl:output message="tns:ISvcConsultazione_ConsultazioneIndicatore_OutputMessage" wsaw:Action="http://inps.it/ConsultazioneISEE/ISvcConsultazione/ConsultazioneIndicatoreResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BasicHttpBinding_ISvcConsultazione" type="tns:ISvcConsultazione">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ConsultazioneAttestazione">
+			<soap:operation soapAction="http://inps.it/ConsultazioneISEE/ISvcConsultazione/ConsultazioneAttestazione" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ConsultazioneIndicatore">
+			<soap:operation soapAction="http://inps.it/ConsultazioneISEE/ISvcConsultazione/ConsultazioneIndicatore" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SvcConsultazione">
+		<wsdl:port name="BasicHttpBinding_ISvcConsultazione" binding="tns:BasicHttpBinding_ISvcConsultazione">
+			<soap:address location="https://api.inps.it/pdnd/soap/ConsultazioneISEE/v1"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

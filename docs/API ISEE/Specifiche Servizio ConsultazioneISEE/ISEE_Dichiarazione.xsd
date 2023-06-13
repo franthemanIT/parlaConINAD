@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- ver 1.3 del 08/06/2021 -->
+<xs:schema xmlns="http://inps.it/ISEERiforma" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://inps.it/ISEERiforma" elementFormDefault="qualified">
+	<xs:include schemaLocation="ISEE_TipiComuni.xsd"/>
+	<xs:element name="Dichiarazione" type="TypeDichiarazione"/>
+	<!-- Dichiarazione-->
+	<!-- Contiene i tag Operazione, NucleoFamiliare, ModelloBase e Sottoscrizione-->
+	<xs:complexType name="TypeDichiarazione">
+		<xs:sequence>
+			<!-- Operazione -->
+			<!-- Il tipo operazione può contenere: -->
+			<!--  N - Nuova dichiarazione -->
+			<!--  A - Integrazione componente aggiuntiva -->
+			<!--  I - Integrazione redditi -->
+			<!--  S - Integrazione socio-sanitario residenziale -->
+			<!--  C - ISEE Corrente -->
+			<!--  R - Rettifica -->
+			<!--  X - Annullamento -->
+			<!-- Il numero protocollo di riferimento non deve essere valorizzato in caso di nuova dichiarazione, 
+				mentre è obbligatorio negli altri casi -->
+			<xs:element name="Operazione">
+				<xs:complexType>
+					<xs:attribute name="Tipo" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="N"/>
+								<xs:enumeration value="A"/>
+								<xs:enumeration value="I"/>
+								<xs:enumeration value="S"/>
+								<xs:enumeration value="C"/>
+								<xs:enumeration value="R"/>
+								<xs:enumeration value="X"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="CodiceFiscaleRiferimento" type="TypeCodiceFiscale" use="optional"/>
+					<xs:attribute name="NumeroProtocolloRiferimento" type="TypeProtocollo" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- Nucleo familiare -->
+			<!-- Contiene tutti i componenti del nucleo familiare -->
+			<!-- (Quadro A) del modello Base -->
+			<xs:element name="NucleoFamiliare" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ComponenteNucleo" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="FoglioComponenteNucleo" type="TypeComponente"/>
+								</xs:sequence>
+								<xs:attribute name="RapportoConDichiarante" use="required">
+									<!-- D Dichiarante -->
+									<!-- C Coniuge -->
+									<!-- F Figlio Minorenne -->
+									<!-- MA Figlio in Affidamento preadottivo -->
+									<!-- FC Figlio Maggiorenne convivente -->
+									<!-- FNC Figlio Maggiorenne non convivente (a carico ai fini IRPEF) -->
+									<!-- P Altra persona convivente -->
+									<!-- GNC Genitore NON Coniugato e NON convivente - Valore da indicare per la componente attratta nel Nucleo N.B da non confondere con la componente aggiuntiva -->
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="D"/>
+											<xs:enumeration value="C"/>
+											<xs:enumeration value="F"/>
+											<xs:enumeration value="MA"/>
+											<xs:enumeration value="FC"/>
+											<xs:enumeration value="FNC"/>
+											<xs:enumeration value="P"/>
+											<xs:enumeration value="GNC"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="FlagAssenzaReddito" type="xs:boolean" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- Modello base -->
+			<!-- Può essere di tipo "Standard" o "Ridotto" tale valore è indicato nell'attributo Tipo -->
+			<xs:element name="ModelloBase" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- Composizione nucleo ristretto -->
+						<!-- Elemento da valorizzare solo per i modelli base di tipo ridotto, per i quali vanno indicati i codici fiscali dei componenti del nucleo,
+							il beneficiario e i rapporti con esso -->
+						<!-- (Quadro A) del Modello Base Ridotto-->
+						<xs:element name="NucleoRistretto" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ComponenteNucleoRistretto" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+											<xs:attribute name="FlagBeneficiario" type="xs:boolean" use="required"/>
+											<xs:attribute name="RelazioneConBeneficiario" use="required">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="B"/>
+														<xs:enumeration value="C"/>
+														<xs:enumeration value="F"/>
+														<xs:enumeration value="FC"/>
+														<xs:enumeration value="FNC"/>
+														<xs:enumeration value="MA"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<!-- Condizioni relative ai figli del nucleo che impattano nelle maggiorazioni per il calcolo della scala d'equivalenza-->
+						<!-- (Quadro A) -->
+						<xs:element name="CondizioniNucleo" minOccurs="0">
+							<xs:complexType>
+								<xs:attribute name="FlagLavoroGenitori" type="xs:boolean" use="required"/>
+								<xs:attribute name="FlagUnicoGenitore" type="xs:boolean" use="required"/>
+								<xs:attribute name="NumeroFigli" use="optional">
+									<xs:simpleType>
+										<xs:restriction base="xs:unsignedInt">
+											<xs:minInclusive value="3"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="NumeroFigliConviventi" type="xs:unsignedInt" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+						<!-- Abitazione -->
+						<!-- (Quadro B) -->
+						<xs:element name="Abitazione" type="TypeAbitazione"/>
+						<!-- Universitario -->
+						<!-- (Quadro C) -->
+						<xs:element name="Universitario" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="CodiceFiscaleBeneficiario" type="TypeCodiceFiscale" use="required"/>
+								<xs:attribute name="PresenzaGenitori" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="TuttiPresenti"/>
+											<xs:enumeration value="SoloUno"/>
+											<xs:enumeration value="ConiugatiNonPresenti"/>
+											<xs:enumeration value="NonConiugatiNonPresenti"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="FlagResidenzaStudente" type="xs:boolean" use="optional"/>
+								<xs:attribute name="FlagCapacitaRedditoStudente" type="xs:boolean" use="optional"/>
+								<xs:attribute name="CodiceFiscaleGenitore" type="TypeCodiceFiscale" use="optional"/>
+								<xs:attribute name="NumeroProtocolloRifGenitore" type="TypeProtocollo" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+						<!-- Genitori non conviventi -->
+						<!-- (Quadro D) -->
+						<xs:element name="GenitoreNonConvivente" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Beneficiario" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+										</xs:complexType>
+									</xs:element>
+									<xs:choice minOccurs="0">
+										<!-- Gli elementi che seguono sono in choice poiché è possibile inserire il protocollo di una dichiarazione già esistente 
+										se il genitore non convivente la possiede o inserire qui i dati del genitore non convivente -->
+										<!-- Numero protocollo di riferimento -->
+										<xs:element name="NumeroProtocolloRiferimento" type="TypeProtocollo"/>
+										<!-- Dati genitore -->
+										<xs:element name="DettaglioGenitoreNonConvivente">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="FoglioComponenteGenitore" type="TypeComponente" minOccurs="0"/>
+													<xs:element name="ComponenteAggiuntivaGenitore" type="TypeComponenteAggiuntiva"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+								<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+								<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+								<xs:attribute name="Nome" type="TypeNome" use="required"/>
+								<xs:attribute name="FlagGenitoreEscluso" type="xs:boolean" use="required"/>
+								<xs:attribute name="FlagConiugatoConPersonaDiversa" type="xs:boolean" use="required"/>
+								<xs:attribute name="FlagAlcunaCondizione" type="xs:boolean" use="required"/>
+							</xs:complexType>
+						</xs:element>
+						<!-- Residenziale -->
+						<!-- (Quadro E) -->
+						<xs:element name="Residenziale" type="TypeResidenziale" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+					<xs:attribute name="Tipo" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="ORD"/>
+								<xs:enumeration value="RID"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<!-- Integrazione componente aggiuntiva -->
+			<!-- Da utilizzare per le componenti aggiuntive integrate successivamente alla dichiarazione -->
+			<!-- Ammesso solamente per l'operazione "A" -->
+			<xs:element name="IntegrazioneComponenteAggiuntiva" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ComponentePerIntegrazioneAggiuntiva">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="FoglioComponenteAggiuntiva" type="TypeComponente"/>
+									<xs:element name="ComponenteAggiuntiva" type="TypeComponenteAggiuntiva"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- Integrazione redditi -->
+			<!-- Da utilizzare per i redditi che non è stato possibile reperire da AE -->
+			<!-- Ammesso solamente per l'operazione "I" -->
+			<xs:element name="IntegrazioneRedditi" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ComponentePerIntegrazioneRedditi" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Redditi" type="TypeRedditiExtra"/>
+								</xs:sequence>
+								<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+								<xs:attribute name="FlagDocRedditi" type="xs:boolean" use="optional"/>
+								<xs:attribute name="FlagDocAltro" type="xs:boolean" use="optional"/>
+								<xs:attribute name="DescDocAltro" type="xs:string" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- Integrazione residenziale -->
+			<!-- Da utilizzare per l'integrazione dei dati delle prestazioni socio-sanitarie residenziali -->
+			<!-- Ammesso solamente per l'operazione "S" -->
+			<xs:element name="IntegrazioneResidenziale" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ComponentePerIntegrazioneResidenziale" type="TypeResidenziale" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- ISEE Corrente -->
+			<!-- Ammesso solamente per l'operazione "C" -->
+			<xs:element name="ISEECorrente" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Variazione" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PatrimonioMobiliare" type="TypePatrimonioMobiliare" minOccurs="0"/>
+									<xs:element name="PatrimonioImmobiliare" type="TypePatrimonioImmobiliare" minOccurs="0"/>
+								</xs:sequence>
+								<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+								<xs:attribute name="TipoVariazione" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="A"/>
+											<xs:enumeration value="B"/>
+											<xs:enumeration value="C"/>
+											<xs:enumeration value="D"/>
+											<xs:enumeration value="AD"/>
+											<xs:enumeration value="BD"/>
+											<xs:enumeration value="CD"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="DataVariazione" type="TypeDataSQL" use="optional"/>
+								<xs:attribute name="RedditoDipendente12Mesi" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="RedditoAutonomo12Mesi" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="TrattamentiAssistenziali12Mesi" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="RedditoDipendente2Mesi" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="RedditoAutonomo2Mesi" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="TrattamentiAssistenziali2Mesi" type="xs:unsignedInt" use="optional"/>
+								<xs:attribute name="Documentazione" type="xs:string" use="optional"/>
+								<xs:attribute name="ProtocolloInpsDSUCorrente" type="TypeProtocollo" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- Sottoscrizione -->
+			<xs:element name="Sottoscrizione" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Delegato" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="DatiDelegato" type="TypeDatiAnagrafici"/>
+									<xs:element name="IndirizzoDelegato" type="TypeIndirizzo"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="CodiceFiscaleSottoscrittore" type="TypeCodiceFiscale" use="required"/>
+					<xs:attribute name="ProtocolloMittente" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="29"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="LuogoSottoscrizione" type="xs:string" use="required"/>
+					<xs:attribute name="DataSottoscrizione" type="TypeDataSQL" use="required"/>
+					<xs:attribute name="NoteSottoscrizione" type="xs:string" use="optional"/>
+					<xs:attribute name="FlagImpedimentoTemporaneo" type="xs:boolean" use="required"/>
+					<xs:attribute name="FlagRappresentanzaLegale" type="xs:boolean" use="required"/>
+					<xs:attribute name="FlagPEC" type="xs:boolean" use="required"/>
+					<xs:attribute name="IndirizzoPEC" type="xs:string" use="optional"/>
+					<xs:attribute name="FlagAutorizzazioneRitiro" type="xs:boolean" use="required"/>
+					<xs:attribute name="NumeroRicevuta" type="xs:string" use="optional"/>
+					<xs:attribute name="ProtocolloInpsDSUCorrente" type="TypeProtocollo" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="CodiceFiscaleDichiarante" type="TypeCodiceFiscale" use="required"/>
+	</xs:complexType>
+	<!-- Componente -->
+	<!-- Dati del componente del nucleo o della persona aggiuntiva -->
+	<xs:complexType name="TypeComponente">
+		<xs:sequence>
+			<!-- Dati Componente -->
+			<!-- (Quadro FC1) -->
+			<xs:element name="DatiComponente">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Anagrafica" type="TypeDatiAnagrafici"/>
+						<xs:element name="Residenza" type="TypeIndirizzo" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="FlagConvivenzaAnagrafica" type="xs:boolean" use="required"/>
+					<xs:attribute name="AttivitaSoggetto" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="LAVIND"/>
+								<xs:enumeration value="LAVDET"/>
+								<xs:enumeration value="LAVINT"/>
+								<xs:enumeration value="LAVCIG"/>
+								<xs:enumeration value="LAVPAR"/>
+								<xs:enumeration value="LAVOCC"/>
+								<xs:enumeration value="LAVAUT"/>
+								<xs:enumeration value="DISOCC"/>
+								<xs:enumeration value="PENSIO"/>
+								<xs:enumeration value="CASLNG"/>
+								<xs:enumeration value="STUDNT"/>
+								<xs:enumeration value="ALTRO"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<!-- Patrimonio mobiliare -->
+			<!-- (Quadro FC2) -->
+			<xs:element name="PatrimonioMobiliare" type="TypePatrimonioMobiliare" minOccurs="0"/>
+			<!-- Patrimonio immobiliare -->
+			<!-- (Quadro FC3) -->
+			<xs:element name="PatrimonioImmobiliare" type="TypePatrimonioImmobiliare" minOccurs="0"/>
+			<!-- Redditi -->
+			<!-- (Quadro FC4) -->
+			<xs:element name="RedditiDaDichiarare" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="RedditoImpSost" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="RedditiEsentiImposta" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="RedditiIRAP" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="RedditiFondiari" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="RedditiTassatiEstero" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="RedditiAIRE" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="RedditiFondiariEstero" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="TrattamentiAssistenziali" type="xs:unsignedInt" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- Assegni periodici -->
+			<!-- (Quadro FC5) -->
+			<xs:element name="AssegniPeriodici" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="AssegniFigli" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="AssegniConiuge" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="AssegniGenitore" type="xs:unsignedInt" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- Veicoli e beni durevoli -->
+			<!-- (Quadro FC6) -->
+			<xs:element name="Veicoli" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Veicolo" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="TipoVeicolo" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="A"/>
+											<xs:enumeration value="M"/>
+											<xs:enumeration value="N"/>
+											<xs:enumeration value="I"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="Targa" type="xs:string" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- Disabilità -->
+			<!-- (Quadro FC7) -->
+			<xs:element name="Disabilita" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="GradoDisabilita" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="DIM"/>
+								<xs:enumeration value="DIG"/>
+								<xs:enumeration value="NAS"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="EnteCertif" type="xs:string" use="required"/>
+					<xs:attribute name="DocCertif" type="xs:string" use="required"/>
+					<xs:attribute name="DataCertif" type="TypeDataSQL" use="required"/>
+					<xs:attribute name="FlagPrestResidenziale" type="xs:boolean" use="required"/>
+					<xs:attribute name="RettaVersata" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="SpeseAssistenza" type="xs:unsignedInt" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- Altri redditi -->
+			<!-- (Quadro FC8) -->
+			<xs:element name="AltriRedditi" type="TypeRedditiExtra" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+	</xs:complexType>
+	<!-- Dati anagrafici -->
+	<xs:complexType name="TypeDatiAnagrafici">
+		<xs:attribute name="Cognome" type="TypeNome" use="required"/>
+		<xs:attribute name="Nome" type="TypeNome" use="required"/>
+		<xs:attribute name="DataNascita" type="TypeDataSQL" use="required"/>
+		<xs:attribute name="Cittadinanza" type="xs:string" use="required"/>
+		<xs:attribute name="Sesso" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="M"/>
+					<xs:enumeration value="F"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ProvinciaNascita" type="TypeSiglaProvincia" use="required"/>
+		<xs:attribute name="CodiceComuneNascita" type="TypeCodiceComune" use="required"/>
+	</xs:complexType>
+	<!-- Dati indirizzo -->
+	<xs:complexType name="TypeIndirizzo">
+		<xs:attribute name="Indirizzo" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="256"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Civico" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="16"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="CodiceComune" type="TypeCodiceComune" use="required"/>
+		<xs:attribute name="Provincia" type="TypeSiglaProvincia" use="required"/>
+		<xs:attribute name="Cap" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[0-9]{5}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Telefono" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="12"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Cellulare" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="12"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="IndirizzoEMail" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<!-- Abitazione -->
+	<xs:complexType name="TypeAbitazione">
+		<xs:sequence>
+			<xs:element name="IndirizzoAbitazione" type="TypeIndirizzo"/>
+			<xs:element name="Locazione" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Intestatario" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Data" type="TypeDataSQL" use="required"/>
+					<xs:attribute name="Serie" type="xs:string" use="required"/>
+					<xs:attribute name="Numero" type="xs:string" use="required"/>
+					<xs:attribute name="CodUfficio" type="xs:string" use="required"/>
+					<xs:attribute name="Canone" type="xs:unsignedInt" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="TipoAbitazione" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="000"/>
+					<xs:enumeration value="001"/>
+					<xs:enumeration value="999"/>
+					<!-- 000: Proprietà -->
+					<!-- 001: Locazione -->
+					<!-- 999: Altro -->
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ResidenzaRiferimento" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="D"/>
+					<xs:enumeration value="C"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<!-- Patrimonio mobiliare -->
+	<!-- (Quadro FC2) -->
+	<xs:complexType name="TypePatrimonioMobiliare">
+		<xs:sequence>
+			<xs:element name="Rapporto" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="TipoRapporto" use="required">
+						<!-- 01  Conti correnti -->
+						<!-- 02  Rapporto di conto deposito titoli e/o obbligazioni -->
+						<!-- 03  Conto deposito a risparmio libero/vincolato-->
+						<!-- 04  Rapporto fiduciario ex legge n. 1966 del 1939 -->
+						<!-- 05  Gestione collettiva del risparmio -->
+						<!-- 06  Gestione patrimoniale -->
+						<!-- 07  Certificati di deposito e buoni fruttiferi -->
+						<!-- 09  Conto  terzi individuale/globale -->
+						<!-- 23  Prodotti finanziari emessi da imprese di assicurazione -->
+						<!-- 99  Altro -->
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="01"/>
+								<xs:enumeration value="02"/>
+								<xs:enumeration value="03"/>
+								<xs:enumeration value="04"/>
+								<xs:enumeration value="05"/>
+								<xs:enumeration value="06"/>
+								<xs:enumeration value="07"/>
+								<xs:enumeration value="09"/>
+								<xs:enumeration value="23"/>
+								<xs:enumeration value="99"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="Identificativo" type="xs:string" use="required"/>
+					<xs:attribute name="CodiceFiscaleOperatore" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="16"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="Saldo3112" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="ConsistenzaMedia" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="Valore" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="DataInizio" type="TypeDataSQL" use="optional"/>
+					<xs:attribute name="DataFine" type="TypeDataSQL" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Incremento" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="IncrementoImmobiliare" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="IncrementoMobiliare" type="xs:unsignedInt" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="FlagPossessoRapportoFinanziario" type="xs:boolean" use="required"/>
+		<xs:attribute name="FlagIncremento" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+	<!-- Patrimonio immobiliare -->
+	<!-- (Quadro FC3) -->
+	<xs:complexType name="TypePatrimonioImmobiliare">
+		<xs:sequence>
+			<xs:element name="Patrimonio" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="TipoPatrimonio" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="F"/>
+								<xs:enumeration value="TE"/>
+								<xs:enumeration value="TA"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="CodiceComuneStato" type="TypeCodiceComune" use="required"/>
+					<xs:attribute name="QuotaPosseduta" type="TypePercentuale" use="required"/>
+					<xs:attribute name="ValoreImu" type="xs:unsignedInt" use="required"/>
+					<xs:attribute name="MutuoResiduo" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="FlagAbitazione" type="xs:boolean" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Altri redditi -->
+	<!-- (Quadro FC8) -->
+	<xs:complexType name="TypeRedditiExtra">
+		<xs:attribute name="FlagEsonerato" type="xs:boolean" use="required"/>
+		<xs:attribute name="FlagIntegrazione" type="xs:boolean" use="required"/>
+		<xs:attribute name="FlagRettifica" type="xs:boolean" use="required"/>
+		<xs:attribute name="RedditoIRPEF" type="xs:integer" use="optional"/>
+		<xs:attribute name="LavoroDipendente" type="xs:unsignedInt" use="optional"/>
+		<xs:attribute name="Pensione" type="xs:unsignedInt" use="optional"/>
+		<xs:attribute name="RedditiAgrari" type="xs:unsignedInt" use="optional"/>
+		<xs:attribute name="RedditiImpSost" type="xs:unsignedInt" use="optional"/>
+		<xs:attribute name="TrattamentiAssistenziali" type="xs:integer" use="optional"/>
+		<xs:attribute name="SpeseDetrazione" type="xs:unsignedInt" use="optional"/>
+		<xs:attribute name="SpeseDeduzione" type="xs:unsignedInt" use="optional"/>
+		<xs:attribute name="SpeseCollabDomestici" type="xs:unsignedInt" use="optional"/>
+	</xs:complexType>
+	<!-- Componente aggiuntiva -->
+	<!-- (Quadro FC9) -->
+	<xs:complexType name="TypeComponenteAggiuntiva">
+		<xs:sequence>
+			<xs:element name="AbitazioneComponenteAggiuntiva" type="TypeAbitazione" minOccurs="0"/>
+			<xs:element name="NucleoFamiliareComponenteAggiuntiva" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="NumeroComponenti" type="xs:unsignedInt" use="required"/>
+					<xs:attribute name="FlagAttivitaLavorativa" type="xs:boolean" use="required"/>
+					<xs:attribute name="FlagGenitoreSolo" type="xs:boolean" use="required"/>
+					<xs:attribute name="FlagPresenzaMinorenne" type="xs:boolean" use="required"/>
+					<xs:attribute name="NumeroFigli" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="NumeroFigliConviventi" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="FlagPresenzaRicoverato" type="xs:boolean" use="required"/>
+					<xs:attribute name="NumeroRicoverati" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="FlagPresenzaConvivente" type="xs:boolean" use="required"/>
+					<xs:attribute name="NumeroConviventi" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="FlagDisabilitaMedia" type="xs:boolean" use="required"/>
+					<xs:attribute name="NumeroDisabiliMedia" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="NumeroDisabiliMediaMinorenni" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="FlagDisabilitaGrave" type="xs:boolean" use="required"/>
+					<xs:attribute name="NumeroDisabiliGrave" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="NumeroDisabiliGraveMinorenni" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="FlagNonAutosufficienti" type="xs:boolean" use="required"/>
+					<xs:attribute name="NumeroNonAutosuff" type="xs:unsignedInt" use="optional"/>
+					<xs:attribute name="NumeroNonAutosuffMinorenni" type="xs:unsignedInt" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+		<xs:attribute name="FlagCompletezzaDati" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<!-- Residenziale -->
+	<!-- (Quadro E) -->
+	<xs:complexType name="TypeResidenziale">
+		<xs:sequence>
+			<!-- Figli non compresi nel nucleo -->
+			<xs:element name="FiglioNonCompresoNelNucleo" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence minOccurs="0">
+						<xs:choice>
+							<!-- Numero protocollo di riferimento -->
+							<xs:element name="NumeroProtocolloRiferimento" type="TypeProtocollo"/>
+							<!-- Dati figlio -->
+							<xs:element name="DettaglioFiglio">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="FoglioComponenteFiglio" type="TypeComponente" minOccurs="0"/>
+										<xs:element name="ComponenteAggiuntivaFiglio" type="TypeComponenteAggiuntiva"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:sequence>
+					<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+					<xs:attribute name="CondizioneEsclusione" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="A"/>
+								<xs:enumeration value="B"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="EstremiEsclusione" type="xs:string" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- Donazioni -->
+			<xs:element name="Donazione" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="TipoImmobile" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="F"/>
+								<xs:enumeration value="TE"/>
+								<xs:enumeration value="TA"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="CodiceComuneStato" type="TypeCodiceComune" use="required"/>
+					<xs:attribute name="QuotaPosseduta" type="TypePercentuale" use="required"/>
+					<xs:attribute name="QuotaDonata" type="TypePercentuale" use="required"/>
+					<xs:attribute name="ValoreImu" type="xs:unsignedInt" use="required"/>
+					<xs:attribute name="CodiceFiscaleRicevente" type="TypeCodiceFiscale" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="CodiceFiscaleBeneficiario" type="TypeCodiceFiscale" use="required"/>
+		<xs:attribute name="DataRichiestaRicovero" type="TypeDataSQL" use="required"/>
+		<xs:attribute name="FlagFigliNonCompresi" type="xs:boolean" use="required"/>
+		<xs:attribute name="FlagDonazioni" type="xs:boolean" use="required"/>
+		<xs:attribute name="FlagDonazioniSuccessive" type="xs:boolean" use="optional"/>
+		<xs:attribute name="FlagDonazioniPrecedentiAlimenti" type="xs:boolean" use="optional"/>
+		<xs:attribute name="FlagDonazioniPrecedentiNoAlimenti" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+</xs:schema>

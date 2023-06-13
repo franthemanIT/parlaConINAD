@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- ver 1.0.4 del 10/09/2015 -->
+<xs:schema xmlns="http://inps.it/ISEERiforma" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://inps.it/ISEERiforma" elementFormDefault="qualified">
+	<xs:simpleType name="TypeDataSQL">
+		<xs:restriction base="xs:date">
+			<xs:minInclusive value="1753-01-01"/>
+			<xs:maxInclusive value="9999-12-31"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeCodiceFiscale">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Za-z]{6}\d{2}[A-Za-z]\d{2}[A-Za-z][A-Za-z0-9]{3}[A-Za-z])|(\d{11} {0,5})"/>
+			<!--xs:length value="16"/ -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeCodiceComune">
+		<xs:restriction base="xs:string">
+			<xs:length value="4"/>
+			<xs:pattern value="[A-Z][0-9][0-9][0-9]"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeSiglaProvincia">
+		<xs:restriction base="xs:string">
+			<xs:length value="2"/>
+			<xs:pattern value="[A-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeDecimal">
+		<xs:restriction base="xs:decimal">
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypePercentuale">
+		<xs:restriction base="xs:decimal">
+			<xs:maxInclusive value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeProtocollo">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="INPS-ISEE-[0-9]{4}-[0-9]{8}[A-Z]-[0-9]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--
+&#x00C0; lettera A maiuscola con accento grave U+00C0
+&#x00C8; lettera E maiuscola con accento grave U+00C8 
+&#x00C9; lettera E maiuscola con accento acute U+00C9  
+&#x00CC; lettera I maiuscola con accento grave U+00CC  
+&#x00D2; lettera O maiuscola con accento grave U+00D2  
+&#x00D9; lettera U maiuscola con accento grave U+00D9  
+-->
+	<xs:simpleType name="TypeNome">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="64"/>
+			<xs:pattern value="[A-Z&#x00C0;&#x00C8;&#x00C9;&#x00CC;&#x00D2;&#x00D9;' -]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeProtocolloFlussoXML">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="INPS-ISE[DRT]{1}-[0-9]{4}-[0-9]{8}[A-Z]"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeStatoDomandaPrestazione">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Da Erogare"/>
+			<xs:enumeration value="Erogata"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeTipoIndicatore">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Ordinario"/>
+			<xs:enumeration value="Minorenne"/>
+			<xs:enumeration value="Universitario"/>
+			<xs:enumeration value="SocioSanitario"/>
+			<xs:enumeration value="Dottorato"/>
+			<xs:enumeration value="Residenziale"/>
+			<!--ORD-->
+			<!--MIN-->
+			<!--UNI-->
+			<!--SSD-->
+			<!--DOT-->
+			<!--RES-->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypePrestazioneDaErogare">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A1.01"/>
+			<xs:enumeration value="A1.02"/>
+			<xs:enumeration value="A1.03"/>
+			<xs:enumeration value="A1.04"/>
+			<xs:enumeration value="A1.05"/>
+			<xs:enumeration value="A1.06"/>
+			<xs:enumeration value="A1.07"/>
+			<xs:enumeration value="A1.08"/>
+			<xs:enumeration value="A1.09"/>
+			<xs:enumeration value="A1.10"/>
+			<xs:enumeration value="A1.11"/>
+			<xs:enumeration value="A1.12"/>
+			<xs:enumeration value="A1.13"/>
+			<xs:enumeration value="A1.14"/>
+			<xs:enumeration value="A1.15"/>
+			<xs:enumeration value="A1.16"/>
+			<xs:enumeration value="A1.17"/>
+			<xs:enumeration value="A1.18"/>
+			<xs:enumeration value="A1.19"/>
+			<xs:enumeration value="A1.20"/>
+			<xs:enumeration value="A2.01"/>
+			<xs:enumeration value="A2.02"/>
+			<xs:enumeration value="A2.03"/>
+			<xs:enumeration value="A2.04"/>
+			<xs:enumeration value="A2.05"/>
+			<xs:enumeration value="A2.06"/>
+			<xs:enumeration value="A2.07"/>
+			<xs:enumeration value="A2.08"/>
+			<xs:enumeration value="A2.09"/>
+			<xs:enumeration value="A2.10"/>
+			<xs:enumeration value="A2.11"/>
+			<xs:enumeration value="A2.12"/>
+			<xs:enumeration value="A3.01"/>
+			<xs:enumeration value="A3.02"/>
+			<xs:enumeration value="A3.03"/>
+			<xs:enumeration value="Z9.99"/>
+			<!--Assegno per il nucleo familiare erogati dai comuni -->
+			<!-- Assegno Maternità erogato dai Comuni-->
+			<!-- Carta acquisti-->
+			<!-- Contributi economici a integrazione del reddito Familiare-->
+			<!-- Contributi economici per alloggio-->
+			<!-- Buoni spesa o buoni pasto-->
+			<!-- Contributi e integrazioni a rette per asili nido-->
+			<!-- Contributi e integrazioni a rette per servizi integrativi o innovativi per la prima infanzia-->
+			<!-- Contributi economici per i servizi scolastici-->
+			<!-- Contributi economici per cure o prestazioni sociali a rilevanza sanitaria-->
+			<!-- Assegnazioni economiche per il sostegno della domiciliarità e dell'autonomia personale-->
+			<!-- Contributi e integrazioni a rette per accesso a centri Diurni-->
+			<!-- Contributi e integrazioni a rette per accesso ai servizi semi-residenziali-->
+			<!-- Contributi e integrazioni a rette per accesso a servizi Residenziali-->
+			<!-- Contributi per servizi alla persona-->
+			<!-- Contributi economici per servizio trasporto e mobilità-->
+			<!-- Contributi economici erogati a titolo di prestito/prestiti d'onore-->
+			<!-- Contributi economici per  l'inserimento lavorativo-->
+			<!-- Borse di studio-->
+			<!-- Buono vacanze-->
+			<!-- Mensa sociale-->
+			<!-- Sostegno socio-educativo territoriale o domiciliare-->
+			<!-- Prestazioni del diritto allo studio universitario-->
+			<!-- Agevolazioni per tasse universitarie-->
+			<!-- Agevolazioni per i servizi di pubblica utilità (telefono, luce, gas)-->
+			<!-- Agevolazioni tributarie comunali (nettezza urbana, ecc.)-->
+			<!-- Assistenza domiciliare socio-assistenziale-->
+			<!-- A.D.I.- Assistenza domiciliare integrata con servizi Sanitari-->
+			<!-- Supporto all'inserimento lavorativo-->
+			<!-- Servizi integrativi per la prima infanzia-->
+			<!-- Sostegno socio-educativo scolastico-->
+			<!-- Mensa scolastica-->
+			<!-- Strutture semiresidenziali-->
+			<!-- Strutture residenziali-->
+			<!-- Asilo Nido-->
+			<!-- Altro-->
+		</xs:restriction>
+		<!-- prestazioni da specificare per le consultazioni-->
+	</xs:simpleType>
+	<xs:complexType name="TypeRicercaCF">
+		<xs:attribute name="CodiceFiscale" type="TypeCodiceFiscale" use="required"/>
+		<xs:attribute name="DataValidita" type="xs:date"/>
+		<xs:attribute name="PrestazioneDaErogare" type="TypePrestazioneDaErogare"/>
+		<xs:attribute name="ProtocolloDomandaEnteErogatore">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="256"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="StatodomandaPrestazione" type="TypeStatoDomandaPrestazione"/>
+	</xs:complexType>
+	<xs:complexType name="TypeRicercaProtDSU">
+		<xs:attribute name="ProtocolloDSU" type="TypeProtocollo" use="required"/>
+		<xs:attribute name="CodiceFiscaleBeneficiario" type="TypeCodiceFiscale"/>
+		<xs:attribute name="PrestazioneDaErogare" type="TypePrestazioneDaErogare"/>
+		<xs:attribute name="ProtocolloDomandaEnteErogatore">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="256"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="StatodomandaPrestazione" type="TypeStatoDomandaPrestazione"/>
+	</xs:complexType>
+	<xs:complexType name="TypeRicercaProtMittente">
+		<xs:attribute name="ProtocolloMittente" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="29"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="CodiceFiscaleBeneficiario" type="TypeCodiceFiscale"/>
+		<xs:attribute name="PrestazioneDaErogare" type="TypePrestazioneDaErogare"/>
+		<xs:attribute name="ProtocolloDomandaEnteErogatore">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="256"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="StatodomandaPrestazione" type="TypeStatoDomandaPrestazione"/>
+	</xs:complexType>
+</xs:schema>
