@@ -1,3 +1,0 @@
-openssl genrsa -out Rivoli_test_Eservice.rsa.pem 2048
-openssl rsa -in Rivoli_test_Eservice.rsa.pem -pubout -out Rivoli_test_Eservice.rsa.pub
-openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in Rivoli_test_Eservice.rsa.pem -out Rivoli_test_Eservice.rsa.priv
