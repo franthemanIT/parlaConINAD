@@ -11,6 +11,7 @@ durataToken = 86400
 a = input('Ci sarei, ho trovato anche la chiave.. premi invio')
 print('Verifico la validità del token disponibile')
 
+## Verifica se un token valido è disponibile, altrimenti ne crea uno e lo memorizza nel file token_INAD.py
 if os.path.exists(".\\token_INAD.py"):
     import token_INAD
     allora = datetime.datetime.strptime(token_INAD.creato, '%a, %d %b %Y %H:%M:%S %Z')
@@ -56,24 +57,23 @@ else:
     else:
       print("Non sono riuscito a creare il token, guarda un po\' token_response cosa dice..")
 
-#OTTIENI I DATI DA VERIFICARE
-cf = input('Inserisci il codice fiscale per cui verificare il domicilio digitale: ')
-mail = input('Inserisci l\'indirizzo PEC da verificare: ')
-data = input ('Inserisci la data alla quale verificare (AAAA-MM-GG): ')
+##Ottiene i dati da verificare
+cf = input('Inserisci il codice fiscale per cui estrarre il domicilio digitale: ')
 ref = input('Inserisci un riferimento al procedimento amministrativo: ')
 
-verifica = parlaConINAD.verifica(token, cf, ref, mail, data)
-if verifica.status_code == 200:
+##Estrazione del domicilio digitale da INAD
+estrazione = parlaConINAD.estrai(token, cf, ref)
+if estrazione.status_code == 200:
   print('Di seguito la response completa:')
-  print(verifica.content)
+  print(estrazione.content)
   try:
-    print('La verifica del domicilio digitale '+mail+' per '+cf+' ha dato esito: '+verifica.json()["outcome"])
+    print('Ecco il domicilio digitale di '+cf+': '+estrazione.json()["digitalAddress"][0]["digitalAddress"])
   except:
     print('L\'interazione è andata a buon fine, ma probabilmente il servizio è chiuso. Leggi sopra.')
 else:
-  if verifica.status_code == 404:
-    print('Domicilio digitale non trovato. Ragionevolmente '+cf+' non è registrato su INAD. Quindi, l\'indirizzo PEC non è domicilio digitale generale.')
+  if estrazione.status_code == 404:
+    print('Domicilio digitale non trovato. Ragionevolmente '+cf+' non è registrato su INAD')
     print('Di seguito la response completa:')
-    print(verifica.json())
+    print(estrazione.json())
   else:
-    print('Qualcosa è andato storto, lo status code della risposta è: '+verifica.status_code+'. Consulta le specifiche per maggiori informazioni')
+    print('Qualcosa è andato storto, lo status code della risposta è: '+estrazione.status_code+'. Consulta le specifiche per maggiori informazioni')

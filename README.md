@@ -22,8 +22,8 @@ Si tratta di un'iniziativa didattica, con lo scopo di:
 
 Quindi: non ci sono controlli sui dati inseriti, la gestione di errori ed eccezioni è ridotta al minimo ecc.
 
-Le specifiche delle API di INAD sono su GitHub: https://github.com/AgID/INAD_API_Extraction.
-Per visualizzarle in modo più comprensibile si può caricare il fiel YAML su editor.swagger.io (come link o come upload).
+Le specifiche delle API di INAD sono su GitHub: https://github.com/AgID/INAD_API_Extraction.  
+Per visualizzarle in modo più comprensibile si può caricare il fiel YAML su editor.swagger.io (come link o come upload).  
 La descrizione testuale è qui: https://domiciliodigitale.gov.it/dgit/home/public/docs/inad-specifiche_tecniche_api_estrazione.pdf
 
 # Prerequisiti Python
@@ -41,21 +41,31 @@ Verificare di averli installati.
 
 # Script estraiCF.py
 
-Cerca il domicilio digitale a partire da un codice fiscale. Richiede inoltre di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.
+Cerca il domicilio digitale a partire da un codice fiscale. Richiede inoltre di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.  
 Lanciare da riga di comando ("py estraiCF.py") e seguire le istruzioni a video.
 
-Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref) e sulla response (estrazione).
+Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref) e sulla response (estrazione).  
+
+# Script estraiCF2.py
+
+Come estraiCF.py ma gestisce il riuso di un token JWT precedentemente ottenuto e ancora valido. Il token e la sua data di rilascio sono memorizzati nel file token_INAD.py.  
+Si suggerisce di analizzare lo script estraiCF.py se si desidera avere l'idea dei passaggi dell'interazione con PDND e INAD.
 
 # Script verifica.py
 
-Verifica la corrispondenza fra un codice fiscale e un domicilio digitale a uan certa data. Oltre a codice fiscale, indirizzo e-mail da verificare e data, richiede di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.
+Verifica la corrispondenza fra un codice fiscale e un domicilio digitale a uan certa data. Oltre a codice fiscale, indirizzo e-mail da verificare e data, richiede di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.  
 Lanciare da riga di comando ("py verifica.py") e seguire le istruzioni a video.
 
-Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref, mail, data) e sulla response (verifica).
+
+# Script verifica2.py
+
+Come verifica.py ma gestisce il riuso di un token JWT precedentemente ottenuto e ancora valido. Il token e la sua data di rilascio sono memorizzati nel file token_INAD.py.  
+Si suggerisce di analizzare lo script verifica.py se si desidera avere l'idea dei passaggi dell'interazione con PDND e INAD.  
+
 
 # Prossimamente
 Seguiranno:
-- verifica di un domicilio digitale a una certa data;
 - recupero massivo di domicili digitali a partire da un file CSV con una colonna che contiene codici fiscali-
+
 
 ATTENZIONE (per gli "spippolatori" del finesettimana): l'ambiente di test di Infocamere è attivo dal lunedì al venerdì dalle 7 alle 21
