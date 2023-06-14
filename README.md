@@ -7,8 +7,8 @@ Prerequisiti (si irmando alla documentazione della PDND (https://docs.pagopa.it/
 - in ambiente di collaudo, creare l'accordo di fruizione dell'e-service "INAD API PUBBLICHE CONSULTAZIONE";
 - attendere l'approvazione;
 - creare coppia di chiavi come da documentazione;
-- in ambiente di collaudo, creare client e-service per l'e-service "INAD API PUBBLICHE CONSULTAZIONE";
-- in ambiente di collaudo, creare una finalità da associare al client e-service.
+- in ambiente di collaudo, creare un client e-service e caricarci la chiave pubblica;
+- in ambiente di collaudo, creare una finalità l'e-service "INAD API PUBBLICHE CONSULTAZIONE" e associarla al client e-service creato al punto precedente.
 
 Configurazione di base:
 1) Nella cartella /chiavi salvare chiave pubblica e privata generate per il client e-service;
