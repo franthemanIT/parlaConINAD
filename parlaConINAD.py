@@ -119,9 +119,23 @@ def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalRefere
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "estrai", "richiesto domicilio digitale per "+cf)
-        r = requests.get(url, headers = headers, params = parametri, timeout=100, )
+        r = requests.get(url, headers = headers, params = parametri, timeout=100)
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
     return(r)
     
+def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la data in cui verificare, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
+    headers = {'Authorization': 'Bearer '+token}
+    #parametri = {'codice_fiscale' : cf, 'practicalReference' : ref} #errati? il cf va in URL non in params
+    parametri = {'practicalReference' : ref, 'digital_address' : mail, 'since' : data}
+    #parametri = {'practicalReference' : ref, 'since' : data} #parametri incompleti per test
+    url = baseURL_INAD+"/verify/"+cf
+    with open(logFileName, "a+") as logFile:
+        requestTime=timestamp()
+        logRequest(logFile, requestTime, "GET", "verifica", "richiesto domicilio digitale per "+mail)
+        r = requests.get(url, headers = headers, params = parametri, timeout=100)
+        responseTime=timestamp()
+        info = str(r.status_code)
+        logResponse(logFile, responseTime, requestTime, r.status_code, info)
+    return(r)
