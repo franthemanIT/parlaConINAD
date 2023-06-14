@@ -1,22 +1,13 @@
 import datiINAD
 import parlaConINAD
 
-def clear():
-  os.system('clear')
-
-def get_private_key(key_path):
-  with open(key_path, "rb") as private_key:
-    encoded_string = private_key.read()
-    return encoded_string
-  
-key = get_private_key(datiINAD.keyPath)
-
+key = parlaConINAD.get_private_key(datiINAD.keyPath)
 
 a = input('Ci sarei, ho trovato anche la chiave.. premi invio')
 cf = input('Inserisci il codice fiscale per cui estrarre il domicilio digitale: ')
 ref = input('Inserisci un riferimento al procedimento amministrativo: ')
 
-(assertion) = parlaConINAD.create_m2m_client_assertion(datiINAD.kid, datiINAD.alg, datiINAD.typ, datiINAD.iss, datiINAD.sub, datiINAD.aud, 0, 0, 0, key, datiINAD.PurposeID)
+assertion = parlaConINAD.create_m2m_client_assertion(datiINAD.kid, datiINAD.alg, datiINAD.typ, datiINAD.iss, datiINAD.sub, datiINAD.aud, 0, 0, 0, key, datiINAD.PurposeID)
 #print(assertion)
 with open("assertion.m2m", "w+") as file_ass:
     file_ass.write(assertion)
