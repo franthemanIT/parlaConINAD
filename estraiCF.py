@@ -1,14 +1,5 @@
-##import jwt
-from jose import jwt
-from jose.constants import Algorithms
-import datetime
-import argparse
-import uuid
-import os
 import datiINAD
 import parlaConINAD
-import requests
-import requests_oauth2
 
 def clear():
   os.system('clear')
