@@ -14,6 +14,18 @@ Configurazione di base:
 1) Nella cartella /chiavi salvare chiave pubblica e privata generate per il client e-service;
 2) Creare il file datiINAD.py a partire dallo schema datiINAD.schema.py con i dati del client e-service recuperati dalla PDND e con il percorso alla chiave privata.
 
+# Avvertenze
+
+Si tratta di un'iniziativa didattica, con lo scopo di:
+- rendersi conto dell'interazione con INAD e del passaggio tramite PDND;
+- individuare aspetti di criticità per integrazioni stabili ed eleganti con software "veri" in produzione.
+
+Quindi: non ci sono controlli sui dati inseriti, la gestione di errori ed eccezioni è ridotta al minimo ecc.
+
+Le specifiche delle API di INAD sono su GitHub: https://github.com/AgID/INAD_API_Extraction.
+Per visualizzarle in modo più comprensibile si può caricare il fiel YAML su editor.swagger.io (come link o come upload).
+La descrizione testuale è qui: https://domiciliodigitale.gov.it/dgit/home/public/docs/inad-specifiche_tecniche_api_estrazione.pdf
+
 # Prerequisiti Python
 
 Gli script fanno uso dei moduli:
@@ -33,6 +45,8 @@ Cerca il domicilio digitale a partire da un codice fiscale. Richiede inoltre di 
 Lanciare da riga di comando ("py estraiCF.py") e seguire le istruzioni a video.
 
 # Prossimamente
-Seguiranno: verifica di un domicilio digitale a una certa data, recupero massivo di domicili digitali a partire da un file CSV con una colonna che contiene codici fiscali.
+Seguiranno:
+- verifica di un domicilio digitale a una certa data;
+- recupero massivo di domicili digitali a partire da un file CSV con una colonna che contiene codici fiscali-
 
 ATTENZIONE (per gli "spippolatori" del finesettimana): l'ambiente di test di Infocamere è attivo dal lunedì al venerdì dalle 7 alle 21
