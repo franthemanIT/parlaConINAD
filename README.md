@@ -44,6 +44,15 @@ Verificare di averli installati.
 Cerca il domicilio digitale a partire da un codice fiscale. Richiede inoltre di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.
 Lanciare da riga di comando ("py estraiCF.py") e seguire le istruzioni a video.
 
+Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref) e sulla response (estrazione).
+
+# Script verifica.py
+
+Verifica la corrispondenza fra un codice fiscale e un domicilio digitale a uan certa data. Oltre a codice fiscale, indirizzo e-mail da verificare e data, richiede di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.
+Lanciare da riga di comando ("py verifica.py") e seguire le istruzioni a video.
+
+Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref, mail, data) e sulla response (verifica).
+
 # Prossimamente
 Seguiranno:
 - verifica di un domicilio digitale a una certa data;
