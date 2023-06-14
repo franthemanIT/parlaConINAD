@@ -23,7 +23,7 @@ Si tratta di un'iniziativa didattica, con lo scopo di:
 Quindi: non ci sono controlli sui dati inseriti, la gestione di errori ed eccezioni è ridotta al minimo ecc.
 
 Le specifiche delle API di INAD sono su GitHub: https://github.com/AgID/INAD_API_Extraction.  
-Per visualizzarle in modo più comprensibile si può caricare il fiel YAML su editor.swagger.io (come link o come upload).  
+Per visualizzarle in modo più comprensibile si può caricare il fiel YAML su https://editor.swagger.io/ (come link o come upload).  
 La descrizione testuale è qui: https://domiciliodigitale.gov.it/dgit/home/public/docs/inad-specifiche_tecniche_api_estrazione.pdf
 
 # Prerequisiti Python
