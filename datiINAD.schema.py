@@ -2,7 +2,6 @@
 
 #dati per creare l'assertion m2m
 kid = ''
-sub = ''
 typ = 'JWT'
 iss = ''
 sub = ''
