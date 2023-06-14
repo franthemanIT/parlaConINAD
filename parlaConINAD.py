@@ -133,7 +133,7 @@ def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la 
     url = baseURL_INAD+"/verify/"+cf
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
-        logRequest(logFile, requestTime, "GET", "verifica", "richiesto domicilio digitale per "+mail)
+        logRequest(logFile, requestTime, "GET", "verifica", "richiesta verifica del domicilio digitale "+mail)
         r = requests.get(url, headers = headers, params = parametri, timeout=100)
         responseTime=timestamp()
         info = str(r.status_code)
