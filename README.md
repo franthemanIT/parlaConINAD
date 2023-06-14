@@ -2,7 +2,7 @@
 
 Script Python didattico per interagire con INAD, l'Indice nazionale dei domicili digitali, tramite la PDND (Piattaforma Digitale Nazionale Dati).
 
-Prerequisiti (si irmando alla documentazione della PDND (https://docs.pagopa.it/interoperabilita-1/):
+Prerequisiti (si rimanda alla documentazione della PDND: https://docs.pagopa.it/interoperabilita-1/):
 - aderire alla PDND;
 - in ambiente di collaudo, creare l'accordo di fruizione dell'e-service "INAD API PUBBLICHE CONSULTAZIONE";
 - attendere l'approvazione;
