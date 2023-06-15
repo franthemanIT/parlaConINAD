@@ -15,6 +15,5 @@ Client_id = ''
 Client_assertion_type = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
 Grant_type = 'client_credentials'
 
-#dati per invocare l'e-service INAD
-baseURL = 'https://domiciliodigitaleapi.oscl.infocamere.it'
-
+#dati per invocare l'e-service INAD (ambiente di collaudo)
+baseURL = 'https://domiciliodigitaleapi.oscl.infocamere.it/rest/inad/v1/domiciliodigitale'
