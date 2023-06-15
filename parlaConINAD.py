@@ -9,10 +9,11 @@ import requests_oauth2
 import socket
 import datiINAD
 
-baseURL_auth = "https://auth.uat.interop.pagopa.it/token.oauth2"
+baseURL_auth = "https://auth.uat.interop.pagopa.it/token.oauth2" #Ambiente PDND di collaudo
 baseURL_INAD = datiINAD.baseURL
 logFileName="INAD.log"
 
+## Funzioni che servono per l'interazione con l'utente
 def getIPAddress():
     return socket.gethostbyname(socket.gethostname())
 
@@ -21,7 +22,34 @@ callingUser = os.getlogin()
 
 def timestamp():
     return datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
+
+def attendi():
+    q = input("Premi INVIO/ENTER per proseguire.")
+
+def termina():
+    q = input("Premi INVIO/ENTER per terminare.")
+    exit()
+
+def scegli(domanda):
+    q = input(domanda)
+    if q in listaOK:
+        risposta = True
+    else:
+        risposta = False
+    return risposta
     
+listaOK = ["sì", "SI", "S", "s", "Sì", "OK", "si"] # elenco di parole da interpretare come risposta affermativa in caso di domanda posta dal programma
+
+## Funzioni che servono per la manipolazione di file di input e output
+def crea_cartella(suffisso, dataeora=""): # crea cartella con nome "dataeora-suffisso"
+    x = timestamp() if dataeora=="" else dataeora
+    path="./" + dataeora + "-" + suffisso + "/"
+    if not os.path.isdir(path):
+        os.mkdir(path)
+    return path
+
+
+## Funzioni che servono per il logging   
 def logRequest(logFile, requestTime, verbo, metodo, info):
     rigaDiLog=[requestTime, callingIP, callingUser, verbo, metodo, info]
     logFile.write(";".join(rigaDiLog))
@@ -37,6 +65,8 @@ def logResponse(logFile, responseTime, requestTime, status_code, info):
 def clear():
   os.system('clear')
 
+
+## Funzioni che servono per interazione con PDND per staccare il token
 def get_private_key(key_path):
   with open(key_path, "rb") as private_key:
     encoded_string = private_key.read()
@@ -108,9 +138,11 @@ def getToken(client_id, client_assertion):
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
     return(r)
 
-def ottieniVoucher(client_id, purposeId = ""):
-    pass
-    
+## def ottieniVoucher(client_id, purposeId = ""):
+##    pass
+
+
+## Funzioni per l'interazione con INAD (autoesplicative)
 def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
     url = baseURL_INAD+"/extract/"+cf
     headers = {'Authorization': 'Bearer '+token}
