@@ -136,3 +136,6 @@ assertion.m2m
 docs/
 INAD.log
 token_INAD.py
+*.json
+*.txt
+*.csv

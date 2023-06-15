@@ -9,3 +9,36 @@ with open(".\\file.csv", "r") as IN:
 		for row in reader:
 			row.append("aggiunta")
 			writer.writerow(row)
+			
+			
+
+a = estrazione.json()
+import json
+with open("prova.txt", "w") as file:
+    file.write(json.dumps(a))
+	
+	
+import json	
+resp = parlaConINAD.caricaLista(token, datiINAD.lista, ref)
+resp.json()
+{'state': 'PRESA_IN_CARICO', 'message': 'Richiesta elenco presa in carico', 'id': '565ecd96-bd73-4b8e-8e01-6d7e433d1cab', 'dateTimeRequest': '2023-06-15T19:20:58Z'}
+with open("stato.json", "w") as file:
+    file.write(json.dumps(resp.json()))
+    
+idLista = resp.json()["id"]
+resp2 = parlaConINAD.statoLista(token, idLista)
+resp2.content
+b'{"state":"IN_ELABORAZIONE","message":"Richiesta elenco in fase di processamento"}'
+resp2.json()
+{'state': 'IN_ELABORAZIONE', 'message': 'Richiesta elenco in fase di processamento'}
+with open("stato.json", "w") as file:
+    file.write(json.dumps(resp2.json()))
+
+
+resp3 = parlaConINAD.prelevaLista(token, idLista)
+resp3.status_code
+200
+resp3.json()
+{'list': [{'codiceFiscale': 'CRBFNC95E66G337I', 'since': '2023-06-15T19:25:00Z', 'digitalAddress': [{'digitalAddress': 'test@pec.it'}]}, {'codiceFiscale': 'FRNGRG88A64A794S', 'since': '2023-06-15T19:25:00Z', 'digitalAddress': [{'digitalAddress': 'test@pec.it'}]}, {'codiceFiscale': 'GRGSFN58H18A794C', 'since': '2023-06-15T19:25:00Z', 'digitalAddress': [{'digitalAddress': 'test@pec.it'}]}, {'codiceFiscale': 'TRVVCN73H02L259I', 'since': '2023-06-15T19:25:00Z', 'digitalAddress': [{'digitalAddress': 'vincenzo.travascio@pec.net', 'practicedProfession': 'NON AVVOCATO'}, {'digitalAddress': 'vincenzo.travascio@pec.net', 'practicedProfession': 'MAI AVVOCATO'}, {'digitalAddress': 'vincenzo.travascio@pec.net'}]}]}
+with open("domiciliDIgitali.json", "w") as file:
+     file.write(json.dumps(resp3.json()))

@@ -112,10 +112,10 @@ def ottieniVoucher(client_id, purposeId = ""):
     pass
     
 def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
+    url = baseURL_INAD+"/extract/"+cf
     headers = {'Authorization': 'Bearer '+token}
     #parameters = {'codice_fiscale' : cf, 'practicalReference' : ref}
     parametri = {'practicalReference' : ref}
-    url = baseURL_INAD+"/extract/"+cf
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "estrai", "richiesto domicilio digitale per "+cf)
@@ -126,15 +126,55 @@ def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalRefere
     return(r)
     
 def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la data in cui verificare, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
+    url = baseURL_INAD+"/verify/"+cf
     headers = {'Authorization': 'Bearer '+token}
     #parametri = {'codice_fiscale' : cf, 'practicalReference' : ref} #errati? il cf va in URL non in params
     parametri = {'practicalReference' : ref, 'digital_address' : mail, 'since' : data}
     #parametri = {'practicalReference' : ref, 'since' : data} #parametri incompleti per test
-    url = baseURL_INAD+"/verify/"+cf
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "verifica", "richiesta verifica del domicilio digitale "+mail)
         r = requests.get(url, headers = headers, params = parametri, timeout=100)
+        responseTime=timestamp()
+        info = str(r.status_code)
+        logResponse(logFile, responseTime, requestTime, r.status_code, info)
+    return(r)
+    
+def caricaLista(token, lista, ref):
+    url = baseURL_INAD+"/listDigitalAddress"
+    headers = {'Authorization': 'Bearer '+token}
+    payload = {
+                "codiciFiscali" : lista,
+                "practicalReference" : ref
+              }
+    with open(logFileName, "a+") as logFile:
+        requestTime=timestamp()
+        logRequest(logFile, requestTime, "POST", "carica lista di CF", "richiesta verifica massiva per "+ref)
+        r = requests.post(url, headers = headers, json = payload, timeout=100)
+        responseTime=timestamp()
+        info = str(r.status_code)
+        logResponse(logFile, responseTime, requestTime, r.status_code, info)
+    return(r)
+    
+def statoLista(token, idLista):
+    url = baseURL_INAD+"/listDigitalAddress/state/"+idLista
+    headers = {'Authorization': 'Bearer '+token}
+    with open(logFileName, "a+") as logFile:
+        requestTime=timestamp()
+        logRequest(logFile, requestTime, "GET", "verifica stato lista", "richiesta verifica stato per lista id "+idLista)
+        r = requests.get(url, headers = headers, timeout=100)
+        responseTime=timestamp()
+        info = str(r.status_code)
+        logResponse(logFile, responseTime, requestTime, r.status_code, info)
+    return(r)
+
+def prelevaLista(token, idLista):
+    url = baseURL_INAD+"/listDigitalAddress/response/"+idLista
+    headers = {'Authorization': 'Bearer '+token}
+    with open(logFileName, "a+") as logFile:
+        requestTime=timestamp()
+        logRequest(logFile, requestTime, "GET", "verifica stato lista", "richiesta verifica stato per lista id "+idLista)
+        r = requests.get(url, headers = headers, timeout=100)
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
