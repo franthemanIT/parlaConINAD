@@ -213,11 +213,11 @@ idLista = ricevuta['id']
 listaPronta = False
 while listaPronta == False:
     verifica = parlaConINAD.statoLista(token, idLista)
-    if verifica.status_code in [404, 303]: ## poi sarà 303:
+    if verifica.status_code == 303: ## poi sarà 303:
         listaPronta = True
         stampa("La richiesta è stata elaborata da INAD. Procedo a prelevarla.")
-        stampa(str(verifica.headers))
-        stampa(str(verifica.content))
+        logga(str(verifica.headers)) #debug, si può commentare
+        logga(str(verifica.content)) #debug, si può commentare
         with open(statoJson, "w") as file:
             file.write(json.dumps(verifica.json(), sort_keys=False, indent=4))
     elif verifica.status_code == 200:
@@ -226,8 +226,8 @@ while listaPronta == False:
                 file.write(json.dumps(verifica.json(), sort_keys=False, indent=4))
             stampa("La richiesta è ancora in elaborazione. Attendo "+str(pausa)+" secondi per verificare nuovamente. ")
             stampa("Puoi interrompere il programma con CTRL+C e verificare in seguito lo stato di elaborazione con verificaLista.py.")
-            stampa(str(verifica.headers))
-            stampa(str(verifica.content))
+            logga(str(verifica.headers)) #debug, si può commentare
+            logga(str(verifica.content)) #debug, si può commentare
             time.sleep(pausa)
         except:
             stampa("Probabilmente il server di INAD sta riposando.")
