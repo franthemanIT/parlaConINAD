@@ -187,7 +187,7 @@ invio = parlaConINAD.caricaLista(token, listaCF, ref)
 
 #pausa = 120 + 2 * len(listaCF)
 pausabreve = 60
-pausa = 120
+pausa = 320
 
 if invio.status_code == 202:
     with open(ricevutaJson, "w") as file:
