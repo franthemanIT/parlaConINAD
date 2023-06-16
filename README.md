@@ -51,6 +51,17 @@ Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulter
 Come estraiCF.py ma gestisce il riuso di un token JWT precedentemente ottenuto e ancora valido. Il token e la sua data di rilascio sono memorizzati nel file token_INAD.py.  
 Si suggerisce di analizzare lo script estraiCF.py se si desidera avere l'idea dei passaggi dell'interazione con PDND e INAD.
 
+# Script estraiListaCF.py
+
+Riceve in input un file CSV nel quale una colonna contiene codici fiscali.  
+Uso: py estraiListaCF.py <nomefile>.csv  
+Se non specificato un file csv come argomento, cerca il file listaCF.csv
+L'output generato è salvato nella "cartella di lotto".
+Lo script è da completare:
+- occorre attendere che l'elaborazione da parte di INAD sia pronta --> in preparazione uno script ulteriore che consente di recuperare l'esito di un'interrogazione fatta in precendeza;
+- i domicili estratti sono memorizzati in un file JSON nella cartella di lotto --> in preparazione un'ulteriore elaborazione che restituisce un file CSV che aggiune al CSV orignario una o più coppie di colonne (domicilio digitale, professione);
+- da prevedere la copia del CSV originario nella cartella di lotto (funzionale anche al punto precedente).
+
 # Script verifica.py
 
 Verifica la corrispondenza fra un codice fiscale e un domicilio digitale a uan certa data. Oltre a codice fiscale, indirizzo e-mail da verificare e data, richiede di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.  
@@ -65,7 +76,8 @@ Si suggerisce di analizzare lo script verifica.py se si desidera avere l'idea de
 
 # Prossimamente
 Seguiranno:
-- recupero massivo di domicili digitali a partire da un file CSV con una colonna che contiene codici fiscali-
+- miglioramento estrazione massiva;
+- miglioramento di inad.log (interpretazione delle response per annotazione significativa nel log)
 
 
 ATTENZIONE (per gli "spippolatori" del finesettimana): l'ambiente di test di Infocamere è attivo dal lunedì al venerdì dalle 7 alle 21
