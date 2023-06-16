@@ -159,7 +159,8 @@ def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalRefere
     
 def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la data in cui verificare, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
     url = baseURL_INAD+"/verify/"+cf
-    headers = {'Authorization': 'Bearer '+token}
+    headers = {'Authorization': 'Bearer '+token, allow_redirects : False}
+    #headers = {'Authorization': 'Bearer '+token, 'cache-control': 'private, max-age=0, no-cache, no-store'}
     #parametri = {'codice_fiscale' : cf, 'practicalReference' : ref} #errati? il cf va in URL non in params
     parametri = {'practicalReference' : ref, 'digital_address' : mail, 'since' : data}
     #parametri = {'practicalReference' : ref, 'since' : data} #parametri incompleti per test
