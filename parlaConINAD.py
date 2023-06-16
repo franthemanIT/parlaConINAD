@@ -159,7 +159,7 @@ def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalRefere
     
 def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la data in cui verificare, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
     url = baseURL_INAD+"/verify/"+cf
-    headers = {'Authorization': 'Bearer '+token, allow_redirects : False}
+    headers = {'Authorization': 'Bearer '+token}
     #headers = {'Authorization': 'Bearer '+token, 'cache-control': 'private, max-age=0, no-cache, no-store'}
     #parametri = {'codice_fiscale' : cf, 'practicalReference' : ref} #errati? il cf va in URL non in params
     parametri = {'practicalReference' : ref, 'digital_address' : mail, 'since' : data}
@@ -167,7 +167,7 @@ def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la 
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "verifica", "richiesta verifica del domicilio digitale "+mail)
-        r = requests.get(url, headers = headers, params = parametri, timeout=100)
+        r = requests.get(url, headers = headers, params = parametri, timeout=100, allow_redirects = False)
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
