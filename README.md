@@ -6,7 +6,7 @@ Dato il tenore didattico non ha molto senso usare gli script nell'ambiente di pr
 
 L'interazione, tramite riga di comando, avviene:
 - per interrogazioni singole con richiesta di inserire i dati della richiesta singola;
-- per interrogazioni massive con richiesta di fornire un file CSV con una colonna di codici fiscali. Lo script estraiLista restituisce lo stesso CSV con aggiunta dei dati del domicilio digitale.
+- per interrogazioni massive con richiesta di fornire un file CSV con una colonna di codici fiscali. Lo script estraiLista **restituisce lo stesso CSV con aggiunta dei dati del domicilio digitale**.
 
 Lo script parlaConINAD.py contiene la definizione delle funzioni usate per l'interazione con INAD e per l'interfaccia utente (da riga di comando).  
 
