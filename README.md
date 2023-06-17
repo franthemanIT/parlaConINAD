@@ -1,8 +1,18 @@
 # parlaConINAD
 
-Script Python didattico per interagire con INAD, l'Indice nazionale dei domicili digitali, tramite la PDND (Piattaforma Digitale Nazionale Dati).
+Script Python **didattico** per interagire con INAD, l'Indice nazionale dei domicili digitali, tramite la PDND (Piattaforma Digitale Nazionale Dati).  
+Gli script funzionano nell'**ambiente di collaudo** di PDND e di INAD.  
+Dato il tenore didattico non ha molto senso usare gli script nell'ambiente di produzione, ma in tal caso dovrebbe essere sufficiente cambiare il valore delle variabili degli URL:
+- endpoint di PDND per il rilascio del token;
+- base URL delle API di INAD.
 
-**Prerequisiti** (si rimanda alla documentazione della PDND: https://docs.pagopa.it/interoperabilita-1/):
+L'interazione, tramite riga di comando, avviene:
+- per interrogazioni singole con richiesta di inserire i dati della richiesta singola;
+- per interrogazioni massive con richiesta di fornire un file CSV con una colonna di codici fiscali. Lo script estraiLista restituisce lo stesso CSV con aggiunta dei dati del domicilio digitale.
+
+# Prerequisiti e configurazione
+
+Si rimanda alla documentazione della PDND: https://docs.pagopa.it/interoperabilita-1/). In sintesi:
 - aderire alla PDND;
 - in ambiente di collaudo, creare l'accordo di fruizione dell'e-service "INAD API PUBBLICHE CONSULTAZIONE";
 - attendere l'approvazione;
@@ -11,8 +21,8 @@ Script Python didattico per interagire con INAD, l'Indice nazionale dei domicili
 - in ambiente di collaudo, creare una finalità per l'e-service "INAD API PUBBLICHE CONSULTAZIONE" e associarla al client e-service creato al punto precedente.
 
 **Configurazione** di base:
-1) Nella cartella /chiavi salvare chiave pubblica e privata generate per il client e-service;
-2) Creare il file datiINAD.py a partire dallo schema datiINAD.schema.py con i dati del client e-service recuperati dalla PDND e con il percorso alla chiave privata.
+1) nella cartella /chiavi salvare chiave pubblica e privata generate per il client e-service;
+2) creare il file datiINAD.py a partire dallo schema datiINAD.schema.py con i dati del client e-service recuperati dalla PDND e con il percorso alla chiave privata.
 
 # Avvertenze
 
@@ -20,7 +30,7 @@ Si tratta di un'**iniziativa didattica**, con lo scopo di:
 - rendersi conto dell'interazione con INAD e del passaggio tramite PDND;
 - individuare aspetti di criticità per integrazioni stabili ed eleganti con software "veri" in produzione.
 
-Quindi: non ci sono controlli sui dati inseriti, la gestione di errori ed eccezioni è ridotta al minimo ecc.
+Quindi: non ci sono controlli sui dati inseriti, la gestione di errori ed eccezioni è ridotta al minimo, le chiave privata con cui firmare è memorizzata in chiaro ecc.
 
 Le specifiche delle API di INAD sono su GitHub: https://github.com/AgID/INAD_API_Extraction.  
 Per visualizzarle in modo più comprensibile si può caricare il fiel YAML su https://editor.swagger.io/ (come link o come upload).  
@@ -66,9 +76,9 @@ Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulter
 Come estraiCF.py ma gestisce il riuso di un token JWT precedentemente ottenuto e ancora valido. Il token e la sua data di rilascio sono memorizzati nel file token_INAD.py.  
 Si suggerisce di analizzare lo script estraiCF.py se si desidera avere l'idea dei passaggi dell'interazione con PDND e INAD.  
 
-# Script estraiLista.py
+# Script estraiLista.py <--
 
-Riceve in input un file CSV nel quale una colonna contiene codici fiscali.
+Riceve in input un **file CSV** nel quale una colonna contiene codici fiscali.
 Se non interrotto interroga perodicamente (variabile "pausa") il server di INAD per conoscere lo stato dell'elaborazione della richiesta e prelevare i risultati quando disponibili.  
 Uso: py estraiLista.py <nomefile>.csv  
 Se non specificato un file csv come argomento, cerca il file listaCF.csv (o altro configurato come defaultCSV)
