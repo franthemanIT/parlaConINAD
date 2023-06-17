@@ -21,19 +21,22 @@ tokenFile = "token_INAD"
 tokenPath = ".\\" + tokenFile + ".py"
 durataToken = 86400
 listaOK = parlaConINAD.listaOK ##risposte da interpretare come sì come risposta affermativa in caso di domanda posta dal programma
+defaultCSV = "listaCF.csv" ##indica il nome di un CSV che lo script cerca se non se ne specifica nessuno
+
 
 ## Acquisizione del motivo della richiesta
 print("Benvenuto. Ti guiderò per cercare e aggiungere il domicilio digitale a una lista di codici fiscali contenuti in un file CSV.")
 ref = input("Per iniziare, indica una breve descrizione del motivo della ricerca su INAD: ")
-data_lotto = parlaConINAD.timestamp()
 
 ## Inizializzazione di cartella di lotto, file di output e logging
+data_lotto = parlaConINAD.timestamp()
 path=parlaConINAD.crea_cartella(ref, data_lotto) # crea la cartella di lavoro del lotto
 lottoLog=path + data_lotto + "-" + "lotto.log"
 ricevutaJson = path + data_lotto + "-ricevuta.json"
 statoJson = path + data_lotto + "-stato.json"
 domiciliJson = path + data_lotto + "-domiciliDigitali.json"
 lottoJson=path + data_lotto + "-" + "Lotto.json"
+lottoElaboratoJson = path + data_lotto + "-" + "LottoElaborato.json"
 #erroriCSV = path + data_lotto + "-" + "ErroriCSV.csv"
 #risultatoCFJson=path + data_lotto + "-" + "RisultatoCF.json"
 #esitoInviiJson=path + data_lotto + "-" + "EsitoInvii.json"
@@ -81,25 +84,25 @@ if len(sys.argv) > 1:
       q = input("Premi INVIO/ENTER per terminare.")
       stampa("Programma terminato.")
       exit()
-elif os.path.exists("listaCF.csv"):
+elif os.path.exists(defaultCSV):
    usa_default = input("Non hai indicato il file con i dati da processare. \nHo trovato il file listaCF.csv. Vuoi usare questo? (Sì/No): ")
    if usa_default in listaOK:
          stampa("OK, proseguo con questo file.")
-         nomeFileDati = "listaCF.csv"
+         nomeFileDati = defaultCSV
    else:
          stampa("Per favore indica il file con i dati da processare nel seguente modo:")
-         stampa("python inviaLottoAvvisiDiPagamento.py <nomeDelTuoFile.csv>")
+         stampa("py estraiLista.py nomeDelTuoFile.csv")
          q = input("Premi INVIO/ENTER per terminare.")
          stampa("Programma terminato.")
          exit()
 else:
    stampa("Non hai indicato il file CSV con i dati da processare. Per favore indicalo nel seguente modo:")
-   stampa("python inviaLottoAvvisiDiPagamento.py <nomeDelTuoFile.csv>")
+   stampa("py estraiLista.py nomeDelTuoFile.csv")
    q = input("Premi INVIO/ENTER per terminare.")
    stampa("Programma terminato.")
    exit()
 
-outputCSV = path + nomeFileDati
+outputCSV = path + "elaborato-"+nomeFileDati
 logga("Nome del file con i dati di input: "+nomeFileDati)
 logga("Cartella di lavoro: "+path)
 
@@ -185,15 +188,18 @@ else:
 ## Se OK, salvo la response come ricevuta.json nella cartella di lotto (con anche nome del CSV di partenza e cartella di lavoro)
 invio = parlaConINAD.caricaLista(token, listaCF, ref)
 
-#pausa = 120 + 2 * len(listaCF)
+L = len(listaCF)
+#pausa = 120 + 2 * L
 pausabreve = 60
-pausa = 120
+pausa = 320
 
 if invio.status_code == 202:
     with open(ricevutaJson, "w") as file:
         ricevuta = invio.json()
         ricevuta["nomeFileDati"] = nomeFileDati
         ricevuta["cartellaDiLavoro"] = path
+        ricevuta["data_lotto"] = data_lotto
+        ricevuta["chiaveCF"] = chiaveCF
         file.write(json.dumps(ricevuta,sort_keys=False, indent=4))
     stampa("Lista dei file inviata correttamente. Attendo " + str(pausa) + " secondi per verificare lo stato della richiesta.")
     stampa("Ho salvato la ricevuta della richiesta nella cartella di lotto.")
@@ -213,11 +219,11 @@ idLista = ricevuta['id']
 listaPronta = False
 while listaPronta == False:
     verifica = parlaConINAD.statoLista(token, idLista)
-    if verifica.status_code in [404, 303]: ## poi sarà 303:
+    if verifica.status_code == 303: ## poi sarà 303:
         listaPronta = True
         stampa("La richiesta è stata elaborata da INAD. Procedo a prelevarla.")
-        stampa(str(verifica.headers))
-        stampa(str(verifica.content))
+        logga(str(verifica.headers)) #debug, si può commentare
+        logga(str(verifica.content)) #debug, si può commentare
         with open(statoJson, "w") as file:
             file.write(json.dumps(verifica.json(), sort_keys=False, indent=4))
     elif verifica.status_code == 200:
@@ -225,16 +231,16 @@ while listaPronta == False:
             with open(statoJson, "w") as file:
                 file.write(json.dumps(verifica.json(), sort_keys=False, indent=4))
             stampa("La richiesta è ancora in elaborazione. Attendo "+str(pausa)+" secondi per verificare nuovamente. ")
-            stampa("Puoi interrompere il programma con CTRL+C e verificare in seguito lo stato di elaborazione con verificaLista.py.")
-            stampa(str(verifica.headers))
-            stampa(str(verifica.content))
+            stampa("Puoi interrompere il programma con CTRL+C e verificare in seguito lo stato di elaborazione con recuperaLista.py.")
+            logga(str(verifica.headers)) #debug, si può commentare
+            logga(str(verifica.content)) #debug, si può commentare
             time.sleep(pausa)
         except:
             stampa("Probabilmente il server di INAD sta riposando.")
-            stampa("Interrompo l'esecuzione del programma. Puoi recuperare i risultati dell'estrazione in seguito con lo script verificaLotto.py.")
+            stampa("Interrompo l'esecuzione del programma. Puoi recuperare i risultati dell'estrazione in seguito con lo script recuperaLista.py.")
             parlaConINAD.termina()
     else: 
-        stampa("Qualcosa non funziona. Magari è scaduto il token. Termino il programma. Esegui la verifica più tardi con verificaLista.py.")
+        stampa("Qualcosa non funziona. Magari è scaduto il token. Termino il programma. Esegui la verifica più tardi con recuperaLista.py.")
         with open(statoJson, "w") as file:
             file.write(json.dumps(verifica.json(), sort_keys=False, indent=4))
         parlaConINAD.termina()
@@ -250,33 +256,47 @@ if domicili.status_code == 200:
             listaDomicili = domicili.json()['list']
     except:
         stampa("Probabilmente il server di INAD sta riposando.")
-        stampa("Interrompo l'esecuzione del programma. Puoi recuperare i risultati dell'estrazione in seguito con lo script verificaLotto.py.")
+        stampa("Interrompo l'esecuzione del programma. Puoi recuperare i risultati dell'estrazione in seguito con lo script recuperaLista.py.")
         parlaConINAD.termina()
 else:
-    stampa("Qualcosa è andato storto. Ti invito a guardare i file di log e riprovare più tardi con verificaLista.py.")
+    stampa("Qualcosa è andato storto. Ti invito a guardare i file di log e riprovare più tardi con recuperaLista.py.")
 
-## 16 creo un nuovo csv (stesso nome con suffisso "_DD")con altre colonne per il codice fiscale e la professione eventuale. A tal fine:
-##   - conto il numero massimo N di domicili trovati;
-##   - aggiungo 2N colonne al CSV: domicilioDigitale, professione, domicilioDigitale2, peofessione2, ...., domicilioDigitaleN, professioneN
+
+
+## Creo un nuovo csv con colonne aggiuntive per il codice fiscale e la professione eventuale. A tal fine:
 lottoElaborato = []
-nuoveColonne = 0
-##for i in listaDomicili:
-##   try:
-##      l = len(i["digitalAddress"])
-##      nuoveColonne = max(nuoveColonne, l)
-##for i in lotto:
-##   cf = i[chiaveCF]
-##   for j in listaDomicili:
-##      
 
-##with open("output.csv", "w") as output:
-##    fieldnames=lotto[0].keys()
-##    writer = csv.DictWriter(output, fieldnames=fieldnames, delimiter = ";", lineterminator="\n")
-##    writer.writeheader
-####    writer.writerows(lotto)
-## --> da studiare come creare il CSV nuovo.. with open fileinput with open fileoutput... oppure uso il dizionario importato al passo 6, ci aggiungo i 2N nuovi chiavi/valori e poi converto in csv (con modulo csv)
-## mi servono: os, datetime, json, csv.
-## può capitare che mi rompo di aspettare e accolgo il suggerimento di interrompere con ctrl+c e poi lanciare "recuperaLista.py" con argomento la ricevuta.json
-## recuperaLista parte da 14 (gestire l'impostazione della cartella di lotto come parlaConIO.verificaConsegnaLotto ... creare tabella lotto da lotto.json
+for soggetto in lotto:
+    dizio = {}
+    dizio.update(soggetto)
+    chiave = soggetto[chiaveCF]
+    for risultato in listaDomicili:
+        if risultato["codiceFiscale"] == chiave:
+            if "digitalAddress" in risultato:
+                for address in risultato["digitalAddress"]:
+                    indice = risultato["digitalAddress"].index(address)
+                    suffisso = ('' if indice == 0 else str(indice+1)) 
+                    dizio.update({"domicilioDigitale"+suffisso : address["digitalAddress"]})
+                    if "practicedProfession" in address:
+                        dizio.update({"professione"+suffisso : address["practicedProfession"]})
+            #print(dizio)
+            break
+    lottoElaborato.append(dizio)    
 
+N = 0
+for i in lottoElaborato:
+    l=len(i)
+    if l > N:
+        posiz = lottoElaborato.index(i) # la posizione dell'elemento
+    N = max(N,l)
+        
+fieldnames = list(lottoElaborato[posiz].keys())
 
+with open(outputCSV, "w") as outputfile:
+    writer = csv.DictWriter(outputfile, fieldnames=fieldnames, delimiter = ";", lineterminator="\n")
+    outputfile.write(";".join(fieldnames))
+    outputfile.write("\n")
+    writer.writerows(lottoElaborato)
+    
+stampa("Io avrei finito. Il file "+outputCSV+ " è il file CSV che hai caricato con una colonna aggiuntiva per i domicili digitali trovati.")
+stampa("Se qualche soggetto ha più di un domicilio registrato e/o ha indicato una professione, nel CSV creato trovi ulteriori colonne.")
