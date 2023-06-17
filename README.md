@@ -10,6 +10,8 @@ L'interazione, tramite riga di comando, avviene:
 - per interrogazioni singole con richiesta di inserire i dati della richiesta singola;
 - per interrogazioni massive con richiesta di fornire un file CSV con una colonna di codici fiscali. Lo script estraiLista restituisce lo stesso CSV con aggiunta dei dati del domicilio digitale.
 
+Lo script parlaConINAD.py contiene la definizione delle funzioni usate per l'interazione con INAD e per l'interfaccia utente (da riga di comando).  
+
 # Prerequisiti e configurazione
 
 Si rimanda alla documentazione della PDND: https://docs.pagopa.it/interoperabilita-1/). In sintesi:
@@ -22,7 +24,7 @@ Si rimanda alla documentazione della PDND: https://docs.pagopa.it/interoperabili
 
 **Configurazione** di base:
 1) nella cartella /chiavi salvare chiave pubblica e privata generate per il client e-service;
-2) creare il file datiINAD.py a partire dallo schema datiINAD.schema.py con i dati del client e-service recuperati dalla PDND e con il percorso alla chiave privata.
+2) **creare il file datiINAD.py** a partire dallo schema datiINAD.schema.py con i **dati del client e-service recuperati dalla PDND** e con il percorso alla chiave privata.
 
 # Avvertenze
 
