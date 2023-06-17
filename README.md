@@ -2,9 +2,7 @@
 
 Script Python **didattico** per interagire con INAD, l'Indice nazionale dei domicili digitali, tramite la PDND (Piattaforma Digitale Nazionale Dati).  
 Gli script funzionano nell'**ambiente di collaudo** di PDND e di INAD.  
-Dato il tenore didattico non ha molto senso usare gli script nell'ambiente di produzione, ma in tal caso dovrebbe essere sufficiente cambiare il valore delle variabili degli URL:
-- endpoint di PDND per il rilascio del token;
-- base URL delle API di INAD.
+Dato il tenore didattico non ha molto senso usare gli script nell'ambiente di produzione, ma in tal caso dovrebbe essere sufficiente cambiare il valore delle variabili degli endpoint di PDND e INAD.  
 
 L'interazione, tramite riga di comando, avviene:
 - per interrogazioni singole con richiesta di inserire i dati della richiesta singola;
