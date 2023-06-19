@@ -98,7 +98,7 @@ L = len(listaCF)
 pausabreve = 60
 pausa = 320
 
-outputCSV = path + "fileElaborato.csv"
+outputCSV = path + "elaborato-"+nomeFileDati
 
 stampa("Rescuperate le informazioni dal file "+nomeFileRicevuta +" per il recupero di una lista di domicili digitali.")
 stampa("Inizio il recupero della richiesta con id: "+idLista)

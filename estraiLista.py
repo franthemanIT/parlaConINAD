@@ -8,6 +8,7 @@ import sys
 import time
 import os.path
 import os
+from pathlib import Path
 
 ###import per annotare il log di requests
 import logging
@@ -73,7 +74,7 @@ if len(sys.argv) > 1:
       proseguire = input("Proseguire? (Sì/No):")
       if proseguire in listaOK:
          stampa("OK, proseguo.")
-         nomeFileDati = sys.argv[1]
+         nomeFileDati = Path(sys.argv[1]).name
       else:
           q = input("Premi INVIO/ENTER per terminare.")
           stampa("Programma terminato.")
@@ -102,7 +103,8 @@ else:
    stampa("Programma terminato.")
    exit()
 
-outputCSV = path + "fileElaborato.csv"
+
+outputCSV = path + "elaborato-"+nomeFileDati
 logga("Nome del file con i dati di input: "+nomeFileDati)
 logga("Cartella di lavoro: "+path)
 
