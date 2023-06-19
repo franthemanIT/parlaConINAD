@@ -52,13 +52,13 @@ if len(sys.argv) > 1:
           exit()
    else:
       print("File di input non valido.")
-      print("Per favore indicalo nel seguente modo: python \xxxxxx-ricevuta.json.")
+      print("Per favore indicalo nel seguente modo: python \\xxxxxx-ricevuta.json.")
       q = input("Premi INVIO/ENTER per terminare.")
       print("Programma terminato.")
       exit()
 else:
    print("Non hai indicato il file JSON con la ricevuta della lista di domicili da recupeare. Per favore indicalo nel seguente modo:")
-   print("python recuperaLista.py .\\...nomeDellaTuaCartella...\...-ricevuta.json")
+   print("python recuperaLista.py .\\...nomeDellaTuaCartella...\\...-ricevuta.json")
    q = input("Premi INVIO/ENTER per terminare.")
    print("Programma terminato.")
    parlaConINAD.termina()
@@ -98,7 +98,7 @@ L = len(listaCF)
 pausabreve = 60
 pausa = 320
 
-outputCSV = path + "elaborato-"+nomeFileDati
+outputCSV = path + "fileElaborato.csv"
 
 stampa("Rescuperate le informazioni dal file "+nomeFileRicevuta +" per il recupero di una lista di domicili digitali.")
 stampa("Inizio il recupero della richiesta con id: "+idLista)

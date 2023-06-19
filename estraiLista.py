@@ -102,7 +102,7 @@ else:
    stampa("Programma terminato.")
    exit()
 
-outputCSV = path + "elaborato-"+nomeFileDati
+outputCSV = path + "fileElaborato.csv"
 logga("Nome del file con i dati di input: "+nomeFileDati)
 logga("Cartella di lavoro: "+path)
 
