@@ -32,7 +32,7 @@ Si tratta di un'**iniziativa didattica**, con lo scopo di:
 - rendersi conto dell'interazione con INAD e del passaggio tramite PDND;
 - individuare aspetti di criticità per integrazioni stabili ed eleganti con software "veri" in produzione.
 
-Quindi: non ci sono controlli sui dati inseriti, la gestione di errori ed eccezioni è ridotta al minimo, le chiave privata con cui firmare è memorizzata in chiaro ecc.
+Quindi: non ci sono controlli sui dati inseriti, la gestione di errori ed eccezioni è ridotta al minimo, **la chiave privata con cui firmare l'assertion e i dati del clinet PDND sono memorizzati in chiaro** ecc.
 
 Le specifiche delle API di INAD sono su GitHub: https://github.com/AgID/INAD_API_Extraction.  
 Per visualizzarle in modo più comprensibile si può caricare il fiel YAML su https://editor.swagger.io/ (come link o come upload).  
