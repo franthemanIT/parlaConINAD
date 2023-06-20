@@ -111,7 +111,7 @@ def token_request(client_id, client_assertion):
     headers = {"Content-Type" : "application/x-www-form-urlencoded"}
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
-        logRequest(logFile, requestTime, "POST", "requestToken", "xxxx")
+        logRequest(logFile, requestTime, "POST", "requestToken", client_id)
         r = requests.post(baseURL_auth, headers = headers, timeout=100, data=body)
         responseTime=timestamp()
         info = str(r.status_code)
@@ -150,7 +150,7 @@ def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalRefere
     parametri = {'practicalReference' : ref}
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
-        logRequest(logFile, requestTime, "GET", "estrai", "richiesto domicilio digitale per "+cf)
+        logRequest(logFile, requestTime, "GET", "estrai", "richiesto domicilio digitale per "+cf[:2]+"***")
         r = requests.get(url, headers = headers, params = parametri, timeout=100)
         responseTime=timestamp()
         info = str(r.status_code)
@@ -164,7 +164,7 @@ def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la 
     #parametri = {'practicalReference' : ref, 'since' : data} #parametri incompleti per test
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
-        logRequest(logFile, requestTime, "GET", "verifica", "richiesta verifica del domicilio digitale "+mail)
+        logRequest(logFile, requestTime, "GET", "verifica", "richiesta verifica del domicilio digitale "+mail[:3]+"***")
         r = requests.get(url, headers = headers, params = parametri, timeout=100)
         responseTime=timestamp()
         info = str(r.status_code)

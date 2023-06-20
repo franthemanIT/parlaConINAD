@@ -64,16 +64,25 @@ ref = input('Inserisci un riferimento al procedimento amministrativo: ')
 
 verifica = parlaConINAD.verifica(token, cf, ref, mail, data)
 if verifica.status_code == 200:
-  print('Di seguito la response completa:')
-  print(verifica.content)
   try:
-    print('La verifica del domicilio digitale '+mail+' per '+cf+' ha dato esito: '+verifica.json()["outcome"])
+    if verifica.json()["outcome"] == True: 
+        print('La verifica del domicilio digitale '+ mail +' per '+cf+' ha dato esito posiivo.')
   except:
     print('L\'interazione è andata a buon fine, ma probabilmente il servizio è chiuso. Leggi sopra.')
-else:
-  if verifica.status_code == 404:
-    print('Domicilio digitale non trovato. Ragionevolmente '+cf+' non è registrato su INAD. Quindi, l\'indirizzo PEC non è domicilio digitale generale.')
-    print('Di seguito la response completa:')
+  print('Di seguito la response completa:')
+  print(verifica.content)
+elif verifica.status_code == 400:
+    print("Richiesta mal formulata: " +verifica.json()['detail'])
+elif verifica.status_code == 401:
+    print("Non autorizzato: " + verifica.json()['detail'])
+elif verifica.status_code == 403:
+    print:("Operazione non consentita: " + verifica.json()['detail'])
+elif verifica.status_code == 404:
+    print(verifica.json()['status'] +" - " + verifica.json()['detail'])
+    print('Quindi, l\'indirizzo PEC inserito non è domicilio digitale generale.')
+    print('Di seguito il contenuto completo della risposta: ')
     print(verifica.json())
-  else:
-    print('Qualcosa è andato storto, lo status code della risposta è: '+verifica.status_code+'. Consulta le specifiche per maggiori informazioni')
+else:
+    print('Qualcosa è andato storto, lo status code della risposta è: '+str(verifica.status_code)+'. Consulta le specifiche per maggiori informazioni')
+    print('Di seguito il contenuto completo della risposta: ')
+    print(verifica.content)

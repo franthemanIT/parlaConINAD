@@ -64,16 +64,18 @@ ref = input('Inserisci un riferimento al procedimento amministrativo: ')
 ##Estrazione del domicilio digitale da INAD
 estrazione = parlaConINAD.estrai(token, cf, ref)
 if estrazione.status_code == 200:
-  print('Di seguito la response completa:')
-  print(estrazione.content)
   try:
     print('Ecco il domicilio digitale di '+cf+': '+estrazione.json()["digitalAddress"][0]["digitalAddress"])
   except:
-    print('L\'interazione è andata a buon fine, ma probabilmente il servizio è chiuso. Leggi sopra.')
+    print('L\'interazione è andata a buon fine, ma probabilmente il servizio è chiuso.')
+  print('Di seguito la response completa:')
+  print(estrazione.content)
 else:
   if estrazione.status_code == 404:
-    print('Domicilio digitale non trovato. Ragionevolmente '+cf+' non è registrato su INAD')
+    print('Domicilio digitale non trovato. Ragionevolmente, '+cf+' non è registrato su INAD')
     print('Di seguito la response completa:')
     print(estrazione.json())
   else:
-    print('Qualcosa è andato storto, lo status code della risposta è: '+estrazione.status_code+'. Consulta le specifiche per maggiori informazioni')
+    print('Qualcosa è andato storto, lo status code della risposta è: '+str(estrazione.status_code)+'. Consulta le specifiche per maggiori informazioni')
+    print('Di seguito la response completa:')
+    print(estrazione.content)

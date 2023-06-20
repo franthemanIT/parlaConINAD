@@ -66,16 +66,16 @@ Gli script fanno uso dei moduli:
 Verificare di averli installati. Di solito sono tutti installati di default a part: jose, requests, requests_oauth2. 
 
 
-# Script estraiCF.py
+# Script estrai.py
 
 Cerca il domicilio digitale a partire da un codice fiscale. Richiede inoltre di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.  
 Lanciare da riga di comando ("py estraiCF.py") e seguire le istruzioni a video.
 
 Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref) e sulla response (estrazione).  
 
-# Script estraiCF2.py
+# Script estrai2.py
 
-Come estraiCF.py ma gestisce il riuso di un token JWT precedentemente ottenuto e ancora valido. Il token e la sua data di rilascio sono memorizzati nel file token_INAD.py.  
+Come estrai.py ma gestisce il riuso di un token JWT precedentemente ottenuto e ancora valido. Il token e la sua data di rilascio sono memorizzati nel file token_INAD.py.  
 Si suggerisce di analizzare lo script estraiCF.py se si desidera avere l'idea dei passaggi dell'interazione con PDND e INAD.  
 
 # Script estraiLista.py <--

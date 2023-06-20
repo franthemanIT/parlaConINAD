@@ -46,8 +46,8 @@ if verifica.status_code == 200:
     print('L\'interazione è andata a buon fine, ma probabilmente il servizio è chiuso. Leggi sopra.')
 else:
   if verifica.status_code == 404:
-    print('Domicilio digitale non trovato. Ragionevolmente '+cf+' non è registrato su INAD. Quindi, l\'indirizzo PEC non è domicilio digitale generale.')
+    print('Domicilio digitale non trovato. Ragionevolmente, '+cf+' non è registrato su INAD. Quindi, l\'indirizzo PEC non è domicilio digitale generale.')
     print('Di seguito la response completa:')
     print(verifica.json())
   else:
-    print('Qualcosa è andato storto, lo status code della risposta è: '+verifica.status_code+'. Consulta le specifiche per maggiori informazioni')
+    print('Qualcosa è andato storto, lo status code della risposta è: '+str(verifica.status_code)+'. Consulta le specifiche per maggiori informazioni')
