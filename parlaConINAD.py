@@ -79,7 +79,7 @@ def get_key(key_path):
     
 def create_m2m_client_assertion(kid, alg, typ, iss, sub, aud, jti, iat, exp, key, purposeID = ""):  #iss e exp in realtà sono predeterminati, non argomenti così come jti, id univoco da creare sul momento
     issued = datetime.datetime.utcnow()
-    delta = datetime.timedelta(minutes=43200)
+    delta = datetime.timedelta(minutes=2)
     expire_in = issued + delta
     jti = uuid.uuid4()
     headers_rsa = {
