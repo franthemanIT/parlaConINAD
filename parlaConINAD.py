@@ -1,12 +1,13 @@
-from jose import jwt
-from jose.constants import Algorithms
 import datetime
-import argparse
+import sys
+#import argparse
 import uuid
 import os
-import requests
-import requests_oauth2
 import socket
+import requests
+#import requests_oauth2
+from jose import jwt
+from jose.constants import Algorithms
 import datiINAD
 
 baseURL_auth = "https://auth.uat.interop.pagopa.it/token.oauth2" #Ambiente PDND di collaudo
@@ -21,41 +22,41 @@ callingIP = getIPAddress()
 callingUser = os.getlogin()
 
 def timestamp():
-    return datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
+    return datetime.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
 
 def attendi():
     q = input("Premi INVIO/ENTER per proseguire.")
 
 def termina():
     q = input("Premi INVIO/ENTER per terminare.")
-    exit()
+    sys.exit()
 
-def scegli(domanda):
-    q = input(domanda)
-    if q in listaOK:
-        risposta = True
-    else:
-        risposta = False
-    return risposta
-    
+#def scegli(domanda):
+    #q = input(domanda)
+    #if q in listaOK:
+        #risposta = True
+    #else:
+        #risposta = False
+    #return risposta
+
 listaOK = ["sì", "SI", "S", "s", "Sì", "OK", "si"] # elenco di parole da interpretare come risposta affermativa in caso di domanda posta dal programma
 
 ## Funzioni che servono per la manipolazione di file di input e output
 def crea_cartella(suffisso, dataeora=""): # crea cartella con nome "dataeora-suffisso"
     x = timestamp() if dataeora=="" else dataeora
-    path="./" + dataeora + "-" + suffisso + "/"
+    path="./" + x + "-" + suffisso + "/"
     if not os.path.isdir(path):
         os.mkdir(path)
     return path
 
 
-## Funzioni che servono per il logging   
+## Funzioni che servono per il logging
 def logRequest(logFile, requestTime, verbo, metodo, info):
     rigaDiLog=[requestTime, callingIP, callingUser, verbo, metodo, info]
     logFile.write(";".join(rigaDiLog))
     logFile.write("\n")
     logFile.flush()
-    
+
 def logResponse(logFile, responseTime, requestTime, status_code, info):
     rigaDiLog=[responseTime, callingIP, requestTime, str(status_code), info]
     logFile.write(";".join(rigaDiLog))
@@ -63,21 +64,20 @@ def logResponse(logFile, responseTime, requestTime, status_code, info):
     logFile.flush()
     
 def clear():
-  os.system('clear')
-
+    os.system("clear")
 
 ## Funzioni che servono per interazione con PDND per staccare il token
 def get_private_key(key_path):
-  with open(key_path, "rb") as private_key:
-    encoded_string = private_key.read()
-    return encoded_string
+    with open(key_path, "rb") as private_key:
+        encoded_string = private_key.read()
+        return encoded_string
     
 def get_key(key_path):
-  with open(key_path, "rb") as key:
-    encoded_string = key.read()
-    return encoded_string
-    
-def create_m2m_client_assertion(kid, alg, typ, iss, sub, aud, jti, iat, exp, key, purposeID = ""):  #iss e exp in realtà sono predeterminati, non argomenti così come jti, id univoco da creare sul momento
+    with open(key_path, "rb") as key:
+        encoded_string = key.read()
+        return encoded_string
+
+def create_m2m_client_assertion(kid, alg, typ, iss, sub, aud, key, purposeID = ""):  #crea l'asserzione firmata per ottenere il token da PDND
     issued = datetime.datetime.utcnow()
     delta = datetime.timedelta(minutes=2)
     expire_in = issued + delta
@@ -97,7 +97,7 @@ def create_m2m_client_assertion(kid, alg, typ, iss, sub, aud, jti, iat, exp, key
         "purposeId" : purposeID
     }
     client_assertion = jwt.encode(payload, key, algorithm=Algorithms.RS256, headers=headers_rsa)
-    return(client_assertion)
+    return client_assertion
 
 def token_request(client_id, client_assertion):
     client_assertion_type = datiINAD.Client_assertion_type
@@ -116,7 +116,7 @@ def token_request(client_id, client_assertion):
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
-    return(r, body)
+    return (r, body)
 
 
 def getToken(client_id, client_assertion):
@@ -136,7 +136,7 @@ def getToken(client_id, client_assertion):
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
-    return(r)
+    return r
 
 ## def ottieniVoucher(client_id, purposeId = ""):
 ##    pass
@@ -145,9 +145,9 @@ def getToken(client_id, client_assertion):
 ## Funzioni per l'interazione con INAD (autoesplicative)
 def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
     url = baseURL_INAD+"/extract/"+cf
-    headers = {'Authorization': 'Bearer '+token}
-    #parameters = {'codice_fiscale' : cf, 'practicalReference' : ref}
-    parametri = {'practicalReference' : ref}
+    headers = {"Authorization": "Bearer "+token}
+    #parameters = {"codice_fiscale" : cf, "practicalReference" : ref}
+    parametri = {"practicalReference" : ref}
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "estrai", "richiesto domicilio digitale per "+cf[:2]+"***")
@@ -155,13 +155,13 @@ def estrai(token, cf, ref):  #cf è il codice fiscale, ref è il practicalRefere
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
-    return(r)
-    
+    return r
+
 def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la data in cui verificare, ref è il practicalReference cioè il riferimento al procedimento amministrativo per il quale si richiede l'estrazione
     url = baseURL_INAD+"/verify/"+cf
-    headers = {'Authorization': 'Bearer '+token}
-    parametri = {'practicalReference' : ref, 'digital_address' : mail, 'since' : data}
-    #parametri = {'practicalReference' : ref, 'since' : data} #parametri incompleti per test
+    headers = {"Authorization": "Bearer "+token}
+    parametri = {"practicalReference" : ref, "digital_address" : mail, "since" : data}
+    #parametri = {"practicalReference" : ref, "since" : data} #parametri incompleti per test
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "verifica", "richiesta verifica del domicilio digitale "+mail[:3]+"***")
@@ -169,11 +169,11 @@ def verifica(token, cf, ref, mail, data):  #cf è il codice fiscale, data è la 
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
-    return(r)
-    
+    return r
+
 def caricaLista(token, lista, ref):
     url = baseURL_INAD+"/listDigitalAddress"
-    headers = {'Authorization': 'Bearer '+token}
+    headers = {"Authorization": "Bearer "+token}
     payload = {
                 "codiciFiscali" : lista,
                 "practicalReference" : ref
@@ -185,11 +185,11 @@ def caricaLista(token, lista, ref):
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
-    return(r)
-    
+    return r
+
 def statoLista(token, idLista):
     url = baseURL_INAD+"/listDigitalAddress/state/"+idLista
-    headers = {'Authorization': 'Bearer '+token}
+    headers = {"Authorization": "Bearer "+token}
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "verifica stato lista", "richiesta verifica stato per lista id "+idLista)
@@ -197,11 +197,11 @@ def statoLista(token, idLista):
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
-    return(r)
+    return r
 
 def prelevaLista(token, idLista):
     url = baseURL_INAD+"/listDigitalAddress/response/"+idLista
-    headers = {'Authorization': 'Bearer '+token}
+    headers = {"Authorization": "Bearer "+token}
     with open(logFileName, "a+") as logFile:
         requestTime=timestamp()
         logRequest(logFile, requestTime, "GET", "verifica stato lista", "richiesta verifica stato per lista id "+idLista)
@@ -209,4 +209,4 @@ def prelevaLista(token, idLista):
         responseTime=timestamp()
         info = str(r.status_code)
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
-    return(r)
+    return r

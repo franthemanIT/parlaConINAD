@@ -63,20 +63,20 @@ Gli script fanno uso dei moduli:
 - uuid
 - socket
   
-Verificare di averli installati. Di solito sono tutti installati di default a part: jose, requests, requests_oauth2. 
+Verificare di averli installati. Di solito sono tutti installati di default a parte: jose, requests, requests_oauth2. 
 
 
 # Script estrai.py
 
 Cerca il domicilio digitale a partire da un codice fiscale. Richiede inoltre di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.  
-Lanciare da riga di comando ("py estraiCF.py") e seguire le istruzioni a video.
+Lanciare da riga di comando ("py estrai.py") e seguire le istruzioni a video.
 
-Si consiglia di lanciarlo nella shell di Python (IDLE) così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref) e sulla response (estrazione).  
+Si consiglia di lanciarlo nella shell di Python (IDLE, oppure "py -i estrai.py") così da poter fare ulteriori operazioni sulle variabili valorizzate (assertion, token, cf, ref) e sulla response (estrazione).  
 
 # Script estrai2.py
 
 Come estrai.py ma gestisce il riuso di un token JWT precedentemente ottenuto e ancora valido. Il token e la sua data di rilascio sono memorizzati nel file token_INAD.py.  
-Si suggerisce di analizzare lo script estraiCF.py se si desidera avere l'idea dei passaggi dell'interazione con PDND e INAD.  
+Si suggerisce di analizzare lo script estrai.py se si desidera avere l'idea dei passaggi dell'interazione con PDND e INAD.  
 
 # Script estraiLista.py <--
 
@@ -108,6 +108,8 @@ Il risultato finale è lo stesso descritto per estraiLista.py.
 Verifica la corrispondenza fra un codice fiscale e un domicilio digitale a uan certa data. Oltre a codice fiscale, indirizzo e-mail da verificare e data, richiede di specificare un riferimento al procedimento amministrativo nell'ambito del quale si richiede l'estrazione.  
 Lanciare da riga di comando ("py verifica.py") e seguire le istruzioni a video.
 
+Lanciare lo script in IDLE (oppure "py -i verifica-py") per fare ulteriori operazioni con le variabili memorizzate.
+
 
 # Script verifica2.py
 
@@ -116,8 +118,7 @@ Si suggerisce di analizzare lo script verifica.py se si desidera avere l'idea de
 
 
 # Prossimamente
-Seguiranno:
-- miglioramento di inad.log (interpretazione delle response per annotazione significativa nel log)
+...
 
 
 **--> ATTENZIONE (per gli "spippolatori" del finesettimana): l'ambiente di test di Infocamere è attivo dal lunedì al venerdì dalle 7 alle 21.**
