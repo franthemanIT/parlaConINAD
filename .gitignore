@@ -145,3 +145,5 @@ test.py
 listaCF.csv
 outputfile/
 outputfile2/*
+generatore/*.priv
+generatore/*.pub
