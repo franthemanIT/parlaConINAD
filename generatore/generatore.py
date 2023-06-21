@@ -1,12 +1,11 @@
-## Questo script consete di generara una coppa di chiavi crittografiche RSA.
-## La chiave si carica come chiava pubblica nel client e-service PDND che si intende per accedere all'e-service INAD.
+## Questo script consente di generare una coppia di chiavi crittografiche RSA.
+## La chiave pubblica si carica (copia e incolla del contenuto del file generato) nel client e-service PDND che si intende usare per accedere all'e-service INAD.
 ## ATTENZIONE: la chiave private è salvata in chiaro!
-
-
 from Crypto.PublicKey import RSA
 
 print("Ciao, questo script genera una coppia di chiavi. \nCarica la chiave pubblica nel client PDND.")
 nome = input("Inserisci un nome per la coppia di chiavi: ")
+
 key = RSA.generate(2048)
 with open(nome+".priv", "wb") as content_file:
     content_file.write(key.exportKey("PEM"))
