@@ -22,6 +22,8 @@ Si rimanda alla documentazione della PDND: https://docs.pagopa.it/interoperabili
 - in ambiente di collaudo, creare un client e-service e caricarci la chiave pubblica;
 - in ambiente di collaudo, creare una finalità per l'e-service "INAD API PUBBLICHE CONSULTAZIONE" e associarla al client e-service creato al punto precedente.
 
+Per la generazione delle chiavi è disponigibile lo script **generatore/generatore.py** che produce una coppia di chiavi crittografiche RSA in formato compatibile con le richieste PDND.
+
 **Configurazione** di base:
 1) nella cartella /chiavi salvare chiave pubblica e privata generate per il client e-service;
 2) **creare il file datiINAD.py** a partire dallo schema datiINAD.schema.py con i **dati del client e-service recuperati dalla PDND** e con il percorso alla chiave privata.
