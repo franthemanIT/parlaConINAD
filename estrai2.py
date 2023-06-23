@@ -22,7 +22,7 @@ if os.path.exists(".\\token_INAD.py"):
     else:
         print("Il token a disposizione è scaduto. Ne ottengo un altro.")
         #a = input("Premi INVIO per proseguire.")
-        assertion = parlaConINAD.create_m2m_client_assertion(datiINAD.kid, datiINAD.alg, datiINAD.typ, datiINAD.iss, datiINAD.sub, datiINAD.aud, 0, 0, 0, key, datiINAD.PurposeID)
+        assertion = parlaConINAD.create_m2m_client_assertion(datiINAD.kid, datiINAD.alg, datiINAD.typ, datiINAD.iss, datiINAD.sub, datiINAD.aud, key, datiINAD.PurposeID)
         #with open("assertion.m2m", "w+") as file_ass:
             #file_ass.write(assertion)
         #b = input("Ho creato l\'asserzione firmata, guarda il file assertion.. premi INVIO/ENTER")
@@ -41,7 +41,7 @@ if os.path.exists(".\\token_INAD.py"):
             print("Non sono riuscito a creare il token, guarda un po\' token_response cosa dice..")
 else:
     print("Nessun token disponibile. Ne ottengo uno.")
-    assertion = parlaConINAD.create_m2m_client_assertion(datiINAD.kid, datiINAD.alg, datiINAD.typ, datiINAD.iss, datiINAD.sub, datiINAD.aud, 0, 0, 0, key, datiINAD.PurposeID)
+    assertion = parlaConINAD.create_m2m_client_assertion(datiINAD.kid, datiINAD.alg, datiINAD.typ, datiINAD.iss, datiINAD.sub, datiINAD.aud, key, datiINAD.PurposeID)
     #with open("assertion.m2m", "w+") as file_ass:
         #file_ass.write(assertion)
     #b = input("Ho creato l\'asserzione firmata, guarda il file assertion.. premi invio")
