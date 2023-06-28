@@ -64,7 +64,7 @@ mail = input("Inserisci l\'indirizzo PEC da verificare: ")
 data = input ("Inserisci la data alla quale verificare (AAAA-MM-GG): ")
 ref = input("Inserisci un riferimento al procedimento amministrativo: ")
 
-verifica = parlaConINAD.verifica(token, cf, ref, mail, data)
+verifica = parlaConINAD.verificaDomicilio(token, cf, ref, mail, data)
 if verifica.status_code == 200:
     try:
         if verifica.json()["outcome"] is True:

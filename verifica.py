@@ -35,7 +35,7 @@ else:
   print("Non sono riuscito a creare il token, guarda un po\' token_response cosa dice..")
 
 
-verifica = parlaConINAD.verifica(token, cf, ref, mail, data)
+verifica = parlaConINAD.verificaDomicilio(token, cf, ref, mail, data)
 
 if verifica.status_code == 200:
   print("Di seguito la response completa:")

@@ -178,7 +178,7 @@ def estrai(token, cf, ref):
         logResponse(logFile, responseTime, requestTime, r.status_code, info)
     return r
 
-def verifica(token, cf, ref, mail, data):
+def verificaDomicilio(token, cf, ref, mail, data):
     '''Verifica la validità di un domicilio digitale per un certo codice fiscale a una certa data
     ref è il practicalReference cioè il riferimento al procedimento amministrativo 
     per il quale si richiede l'estrazione'''
