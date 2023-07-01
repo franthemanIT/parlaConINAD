@@ -1,5 +1,8 @@
 # parlaConINAD
 
+--> Una versione profondamnete rivisitata, con le medesime fuzioni, è disponibile su https://github.com/franthemanIT/parlaConINAD2.  
+--> Questa versione mantiene il suo valore didattico perché gli script sono più facilmente interpretabili rispetto all'interazione con INAD.
+
 Script Python **didattico** per interagire con INAD, l'Indice nazionale dei domicili digitali, tramite la PDND (Piattaforma Digitale Nazionale Dati - https://domiciliodigitale.gov.it).  
 Gli script funzionano nell'**ambiente di collaudo** di PDND e di INAD.  
 Dato il tenore didattico non ha molto senso usare gli script nell'ambiente di produzione, ma in tal caso dovrebbe essere sufficiente cambiare il valore delle variabili degli endpoint di PDND e INAD.  
@@ -50,23 +53,8 @@ Soprattutto, per implementare **fuzioni sensate** e un **uso di INAD legittimo e
 
 # Prerequisiti Python
 
-Gli script fanno uso dei moduli:
-- jose
-- uuid
-- os
-- requests
-- requests_oauth2
-- socket
-- json
-- csv
-- time
-- datetime
-- argparse
-- uuid
-- socket
-  
-Verificare di averli installati. Di solito sono tutti installati di default a parte: jose, requests, requests_oauth2. 
-
+Gli script fanno uso di alcuni moduli di Python. Fra questi python-jose e requests, che di solito non fanno parte dell'installazione stanard di Python.  
+Verificare di averli installati.
 
 # Script estrai.py
 
