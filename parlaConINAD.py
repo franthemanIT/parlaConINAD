@@ -10,7 +10,8 @@ from jose import jwt
 from jose.constants import Algorithms
 import datiINAD
 
-baseURL_auth = "https://auth.uat.interop.pagopa.it/token.oauth2" #Ambiente PDND di collaudo
+#baseURL_auth = "https://auth.uat.interop.pagopa.it/token.oauth2" #Ambiente PDND di collaudo
+baseURL_auth = "https://auth.interop.pagopa.it/token.oauth2" #Ambiente PDND di produzione
 baseURL_INAD = datiINAD.baseURL
 logFileName="INAD.log"
 
